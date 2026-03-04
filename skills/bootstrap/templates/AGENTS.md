@@ -15,6 +15,14 @@ This project uses [forge](https://github.com/codervisor/forge) skills:
 | `hybrid-ci` | CI/CD for Rust+Node.js with GitHub Actions |
 | `monorepo-version-sync` | Coordinated versioning across packages and languages |
 
+### Installing Skills
+
+If skills are not already available, install them:
+
+```bash
+npx skills add codervisor/forge -g -y
+```
+
 ## Conventions
 
 - **Version source of truth**: Root `package.json` — never edit versions elsewhere directly

@@ -16,6 +16,18 @@ metadata:
 Teach agents how to scaffold a new Rust+Node.js hybrid project with forge skills,
 GitHub Actions workflows, publish pipeline, and versioning infrastructure.
 
+## Required Skills
+
+Bootstrap depends on these forge skills. **Install them after scaffolding** so that
+agents working on the new project can use them automatically:
+
+| Skill | Install Command |
+|-------|-----------------|
+| `leanspec-sdd` | `npx skills add codervisor/forge@leanspec-sdd -g -y` |
+| `rust-npm-publish` | `npx skills add codervisor/forge@rust-npm-publish -g -y` |
+| `hybrid-ci` | `npx skills add codervisor/forge@hybrid-ci -g -y` |
+| `monorepo-version-sync` | `npx skills add codervisor/forge@monorepo-version-sync -g -y` |
+
 ## When to Use This Skill
 
 Activate when any of the following are true:
@@ -93,7 +105,22 @@ Update the generated workflows with project-specific values:
 - **publish.yml** — Set Cargo package names, npm scope, platform packages list
 - **copilot-setup-steps.yml** — Add project-specific tool installation
 
-### Step 5: Verify
+### Step 5: Install Dependent Skills
+
+Install forge skills so agents can use them in the new project:
+
+```bash
+npx skills add codervisor/forge@leanspec-sdd -g -y
+npx skills add codervisor/forge@rust-npm-publish -g -y
+npx skills add codervisor/forge@hybrid-ci -g -y
+npx skills add codervisor/forge@monorepo-version-sync -g -y
+```
+
+This ensures that when agents work on the project later, they automatically
+have access to skills for spec-driven development, CI/CD, publishing, and
+versioning — without needing to discover or install them manually.
+
+### Step 6: Verify
 
 Run these checks after scaffolding:
 
