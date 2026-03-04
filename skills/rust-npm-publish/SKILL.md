@@ -32,7 +32,8 @@ Instead of shipping one npm package with pre-built binaries for all platforms, p
 matching the user's OS/CPU.
 
 ```
-@scope/my-tool                    ← main package (thin wrapper)
+@scope/my-tool                    ← main package (thin JS wrapper + bin.js)
+├── bin.js                        ← resolves platform binary, spawns it
 ├── optionalDependencies:
 │   ├── @scope/my-tool-darwin-arm64   ← macOS ARM (M-series)
 │   ├── @scope/my-tool-darwin-x64     ← macOS Intel
@@ -114,6 +115,89 @@ export default {
 | `linux-x64` | Linux | x86_64 | `x86_64-unknown-linux-gnu` | (none) |
 | `windows-x64` | Windows | x86_64 | `x86_64-pc-windows-msvc` | `.exe` |
 
+## Main Package Wrapper
+
+The main npm package is a **thin JS wrapper** — it contains no Rust code, only a
+`bin.js` that resolves the correct platform binary and spawns it. This is what makes
+`npx my-tool` work.
+
+Use the templates in `templates/wrapper/` as starting points.
+
+### Structure
+
+```
+packages/cli/
+├── package.json     ← "bin": { "my-cli": "bin.js" }, optionalDependencies
+└── bin.js           ← Resolves platform binary, executes with process.argv
+```
+
+### bin.js Pattern
+
+The bin entry point maps `process.platform` + `process.arch` to the correct
+platform package, resolves the binary path, and spawns it:
+
+```javascript
+const { execFileSync } = require('child_process');
+const { join } = require('path');
+
+const PLATFORMS = {
+  'darwin-arm64': '@scope/cli-darwin-arm64',
+  'darwin-x64':   '@scope/cli-darwin-x64',
+  'linux-x64':    '@scope/cli-linux-x64',
+  'win32-x64':    '@scope/cli-windows-x64',
+};
+
+const platformKey = `${process.platform}-${process.arch}`;
+const packageName = PLATFORMS[platformKey];
+
+if (!packageName) {
+  console.error(`Unsupported platform: ${platformKey}`);
+  process.exit(1);
+}
+
+const pkgDir = join(require.resolve(`${packageName}/package.json`), '..');
+const pkgMeta = require(`${packageName}/package.json`);
+const binary = join(pkgDir, pkgMeta.main);
+
+try {
+  execFileSync(binary, process.argv.slice(2), { stdio: 'inherit' });
+} catch (error) {
+  if (error.status !== null) process.exit(error.status);
+  throw error;
+}
+```
+
+### Main package.json
+
+The main package must have `"bin"` pointing to the wrapper and platform packages
+as `optionalDependencies` (added by `add-platform-deps.ts`):
+
+```json
+{
+  "name": "@scope/cli",
+  "bin": { "my-cli": "bin.js" },
+  "files": ["bin.js"],
+  "optionalDependencies": {
+    "@scope/cli-darwin-arm64": "0.1.0",
+    "@scope/cli-darwin-x64": "0.1.0",
+    "@scope/cli-linux-x64": "0.1.0",
+    "@scope/cli-windows-x64": "0.1.0"
+  }
+}
+```
+
+### Key Details
+
+- **Platform key mapping**: `process.platform` returns `win32` (not `windows`), so
+  the lookup table maps `win32-x64` → `@scope/cli-windows-x64`
+- **Binary resolution**: Use `require.resolve('pkg/package.json')` to find the
+  platform package directory, then read `main` from its `package.json` to get the
+  binary filename
+- **Exit code forwarding**: `execFileSync` throws on non-zero exit — catch it and
+  forward `error.status` to preserve the Rust binary's exit code
+- **No platform detection in package.json**: The main package has NO `os`/`cpu`
+  fields — it installs everywhere. Only the platform packages use `os`/`cpu`
+
 ## Key Concepts
 
 ### Platform Package Manifests
@@ -159,6 +243,16 @@ Before publishing, validate binary files:
 - **windows**: PE/MZ header (`0x4D5A`)
 
 ## Troubleshooting
+
+### `npx my-tool` fails with "Unsupported platform"
+- The wrapper's `PLATFORMS` map doesn't include the user's `process.platform`-`process.arch`
+- Check with: `node -e "console.log(process.platform, process.arch)"`
+- Add the missing platform key to `bin.js` and a matching platform package
+
+### Platform package not installed / "Failed to find package"
+- `optionalDependencies` with `os`/`cpu` filtering failed to install the right one
+- Check with: `ls node_modules/@scope/cli-*`
+- Manual fix: `npm install @scope/cli-darwin-arm64`
 
 ### Platform package not found on npm
 - npm registry propagation takes 10-60 seconds

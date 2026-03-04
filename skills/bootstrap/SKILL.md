@@ -73,7 +73,9 @@ my-tool/
 ├── .github/workflows/       ← CI + publish workflows
 ├── .lean-spec/config.json   ← LeanSpec configuration
 ├── specs/                   ← Spec-driven development
-├── packages/cli/            ← Main npm package(s)
+├── packages/cli/            ← Main npm package (thin JS wrapper)
+│   ├── package.json         ← bin + optionalDependencies
+│   └── bin.js               ← Resolves platform binary, spawns it
 ├── rust/                    ← Rust workspace (or root Cargo.toml)
 ├── scripts/                 ← Publish & version scripts
 ├── publish.config.ts        ← Publish pipeline configuration
@@ -92,10 +94,11 @@ config-driven — fill in values from Step 1.
 
 1. **Root configs** — `package.json`, `pnpm-workspace.yaml`, `Cargo.toml`, `turbo.json`
 2. **Publish config** — `publish.config.ts` (drives script generation)
-3. **Scripts** — Copy from `rust-npm-publish/templates/scripts/`
-4. **Workflows** — Copy from `hybrid-ci/templates/workflows/`, customize matrix
-5. **LeanSpec** — Initialize `.lean-spec/config.json` and `specs/`
-6. **AGENTS.md** — Project-level agent instructions referencing skills
+3. **Main package wrapper** — Copy `bin.js` + `package.json` from `rust-npm-publish/templates/wrapper/`, fill in scope/binary name/platforms
+4. **Scripts** — Copy from `rust-npm-publish/templates/scripts/`
+5. **Workflows** — Copy from `hybrid-ci/templates/workflows/`, customize matrix
+6. **LeanSpec** — Initialize `.lean-spec/config.json` and `specs/`
+7. **AGENTS.md** — Project-level agent instructions referencing skills
 
 ### Step 4: Customize Workflows
 

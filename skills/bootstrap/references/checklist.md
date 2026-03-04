@@ -68,8 +68,10 @@ pnpm tsx scripts/validate-no-workspace-protocol.ts
 
 ### npm Packages
 
-- [ ] Main package has bin entry pointing to JS wrapper
-- [ ] JS wrapper resolves and executes the correct platform binary
+- [ ] Main package `package.json` has `"bin"` pointing to `bin.js`
+- [ ] `bin.js` maps `process.platform`+`process.arch` to platform package names
+- [ ] `bin.js` uses `require.resolve` to find platform binary, `execFileSync` to run it
+- [ ] `bin.js` forwards exit codes from the Rust binary
 - [ ] Platform packages have correct `os` and `cpu` fields
 
 ### Git

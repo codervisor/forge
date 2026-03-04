@@ -21,11 +21,8 @@ my-tool/
 │
 ├── packages/
 │   └── cli/                                ← Main npm package (thin JS wrapper)
-│       ├── package.json
-│       ├── src/
-│       │   └── index.ts                    ← CLI entry point (runs binary)
-│       └── bin/
-│           └── my-cli.js                   ← Bin script
+│       ├── package.json                    ← bin + optionalDependencies
+│       └── bin.js                          ← Resolves platform binary, spawns it
 │
 ├── rust/                                   ← Rust workspace root (or root-level)
 │   ├── Cargo.toml                          ← Workspace manifest
