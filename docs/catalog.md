@@ -7,6 +7,27 @@ Complete guide to all skills and actions in the forge repository.
 Skills are agent-teachable knowledge bundles. Install them into your project
 so AI agents can use them during development.
 
+### bootstrap
+
+**Scaffold a new Rust+Node.js hybrid project with all forge skills.**
+
+| Attribute | Value |
+|-----------|-------|
+| Status | Complete |
+| Audience | New projects or repos adding forge infrastructure |
+| Requirements | None (orchestrates other skills) |
+| Directory | [`skills/bootstrap/`](../skills/bootstrap/) |
+
+**Use when:** Starting a new Rust+Node.js project, or adding forge infrastructure
+to an existing repository.
+
+**Includes:**
+- SKILL.md — Bootstrap flow, decision tree, scaffold steps
+- 2 reference docs — project structure, post-bootstrap checklist
+- Templates — Root configs (package.json, Cargo.toml, pnpm-workspace.yaml, turbo.json), publish.config.ts, AGENTS.md, .lean-spec/config.json, .gitignore
+
+---
+
 ### leanspec-sdd
 
 **Spec-Driven Development methodology for AI-assisted development.**

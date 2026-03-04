@@ -13,6 +13,7 @@ Reusable agent skills and GitHub Actions for Rust+Node.js hybrid projects.
 
 | Skill | Description |
 |-------|-------------|
+| `bootstrap` | Scaffold a new Rust+Node.js project with all forge skills |
 | `leanspec-sdd` | Spec-Driven Development methodology for AI-assisted development |
 | `rust-npm-publish` | Distribute Rust binaries via npm platform packages |
 | `hybrid-ci` | CI/CD for Rust+Node.js hybrid repos with GitHub Actions |
