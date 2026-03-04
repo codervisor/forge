@@ -1,5 +1,5 @@
 ---
-status: planned
+status: complete
 created: 2026-03-04
 priority: high
 tags:
@@ -9,7 +9,11 @@ tags:
 - references
 parent: '001'
 created_at: 2026-03-04T06:20:19.967253099Z
-updated_at: 2026-03-04T06:21:07.459711898Z
+updated_at: 2026-03-04T06:32:33.482913753Z
+completed_at: 2026-03-04T06:32:33.482913753Z
+transitions:
+- status: complete
+  at: 2026-03-04T06:32:33.482913753Z
 ---
 # Complete Missing Skill References, Templates, and Scripts
 
@@ -46,16 +50,16 @@ An audit of all four skills reveals that while every SKILL.md is well-written, m
 
 ## Plan
 
-- [ ] **hybrid-ci**: Create `templates/workflows/ci.yml` template
-- [ ] **hybrid-ci**: Create `templates/workflows/publish.yml` template
-- [ ] **hybrid-ci**: Create `templates/workflows/copilot-setup-steps.yml` template
-- [ ] **hybrid-ci**: Add README or symlinks in `templates/actions/` pointing to `actions/`
-- [ ] **monorepo-version-sync**: Write `references/version-flow.md`
-- [ ] **monorepo-version-sync**: Write `references/workspace-protocol.md`
-- [ ] **monorepo-version-sync**: Write `references/pre-release-strategy.md`
-- [ ] **monorepo-version-sync**: Create script templates (sync-versions, prepare-publish, validate, restore, bump-dev)
-- [ ] **rust-npm-publish**: Create script templates in `templates/scripts/` for all pipeline steps
-- [ ] Validate all skills pass structure checks (no broken references)
+- [x] **hybrid-ci**: Create `templates/workflows/ci.yml` template
+- [x] **hybrid-ci**: Create `templates/workflows/publish.yml` template
+- [x] **hybrid-ci**: Create `templates/workflows/copilot-setup-steps.yml` template
+- [x] **hybrid-ci**: Add README or symlinks in `templates/actions/` pointing to `actions/`
+- [x] **monorepo-version-sync**: Write `references/version-flow.md`
+- [x] **monorepo-version-sync**: Write `references/workspace-protocol.md`
+- [x] **monorepo-version-sync**: Write `references/pre-release-strategy.md`
+- [x] **monorepo-version-sync**: Create script templates (sync-versions, prepare-publish, validate, restore, bump-dev)
+- [x] **rust-npm-publish**: Create script templates in `templates/scripts/` for all pipeline steps
+- [x] Validate all skills pass structure checks (no broken references)
 
 ## Test
 

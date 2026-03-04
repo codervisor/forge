@@ -199,6 +199,21 @@ npm unpublish @scope/pkg@version
 
 ## References
 
+- [references/version-flow.md](./references/version-flow.md) — Detailed version propagation flow
+- [references/workspace-protocol.md](./references/workspace-protocol.md) — Workspace protocol deep dive
+- [references/pre-release-strategy.md](./references/pre-release-strategy.md) — Dev versioning strategy
+
+## Setup & Activation
+
+Install via forge:
+```bash
+lean-spec skill install codervisor/forge --skill monorepo-version-sync
+```
+
+Or place this folder in:
+- `$PROJECT_ROOT/.github/skills/monorepo-version-sync/`
+- `$PROJECT_ROOT/skills/monorepo-version-sync/`
+
 - [references/version-flow.md](./references/version-flow.md) — How versions propagate
 - [references/workspace-protocol.md](./references/workspace-protocol.md) — workspace:* lifecycle
 - [references/pre-release-strategy.md](./references/pre-release-strategy.md) — Dev/canary/RC patterns

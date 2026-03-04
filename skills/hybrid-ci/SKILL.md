@@ -199,6 +199,21 @@ jobs:
 
 ## References
 
+- [templates/workflows/ci.yml](./templates/workflows/ci.yml) — CI workflow template
+- [templates/workflows/publish.yml](./templates/workflows/publish.yml) — Publish workflow template
+- [templates/workflows/copilot-setup-steps.yml](./templates/workflows/copilot-setup-steps.yml) — Copilot setup template
+
+## Setup & Activation
+
+Install via forge:
+```bash
+lean-spec skill install codervisor/forge --skill hybrid-ci
+```
+
+Or place this folder in:
+- `$PROJECT_ROOT/.github/skills/hybrid-ci/`
+- `$PROJECT_ROOT/skills/hybrid-ci/`
+
 See templates/ for ready-to-use workflow files:
 - [templates/workflows/ci.yml](./templates/workflows/ci.yml) — CI workflow
 - [templates/workflows/publish.yml](./templates/workflows/publish.yml) — Publish workflow

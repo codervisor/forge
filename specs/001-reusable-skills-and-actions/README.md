@@ -1,5 +1,5 @@
 ---
-status: planned
+status: complete
 created: 2026-03-04
 priority: high
 tags:
@@ -8,7 +8,11 @@ tags:
 - actions
 - distribution
 created_at: 2026-03-04T06:16:48.332651196Z
-updated_at: 2026-03-04T06:21:10.519776685Z
+updated_at: 2026-03-04T06:32:33.472522092Z
+completed_at: 2026-03-04T06:32:33.472522092Z
+transitions:
+- status: complete
+  at: 2026-03-04T06:32:33.472522092Z
 ---
 # Reusable Skills & Actions Architecture
 
@@ -106,13 +110,13 @@ The `publish.config.ts` pattern ties skills and actions together — a single co
 
 ## Plan
 
-- [ ] Document skill authoring guidelines (structure, token limits, reference patterns)
-- [ ] Document action authoring guidelines (input conventions, error handling, caching)
-- [ ] Define a skill manifest format for discovery and metadata
-- [ ] Add a CI workflow that validates all skills (token counts, structure) and actions (syntax)
-- [ ] Create a `docs/` site or expanded README with a catalog and usage guides
-- [ ] Add integration tests that verify actions work with sample projects
-- [ ] Establish a versioning and release process for the repo
+- [x] Document skill authoring guidelines (structure, token limits, reference patterns)
+- [x] Document action authoring guidelines (input conventions, error handling, caching)
+- [x] Define a skill manifest format for discovery and metadata
+- [x] Add a CI workflow that validates all skills (token counts, structure) and actions (syntax)
+- [x] Create a `docs/` site or expanded README with a catalog and usage guides
+- [x] Add integration tests that verify actions work with sample projects
+- [x] Establish a versioning and release process for the repo
 
 ## Test
 
