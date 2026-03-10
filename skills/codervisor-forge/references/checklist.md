@@ -58,7 +58,7 @@ pnpm tsx scripts/validate-no-workspace-protocol.ts
 
 - [ ] `.lean-spec/config.json` exists with valid configuration
 - [ ] `specs/` directory exists
-- [ ] `AGENTS.md` references leanspec-sdd skill
+- [ ] `AGENTS.md` references leanspec-sdd skill (from `codervisor/lean-spec`)
 
 ### Versioning
 

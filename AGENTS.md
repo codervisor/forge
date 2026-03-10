@@ -14,7 +14,6 @@ Reusable agent skills and GitHub Actions for Rust+Node.js hybrid projects.
 | Skill | Description |
 |-------|-------------|
 | `codervisor-forge` | Complete toolkit: bootstrap, CI/CD, npm publishing, and versioning for Rust+Node.js hybrid projects |
-| `leanspec-sdd` | Spec-Driven Development methodology for AI-assisted development |
 
 ## Rules
 

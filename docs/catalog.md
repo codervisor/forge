@@ -7,110 +7,33 @@ Complete guide to all skills and actions in the forge repository.
 Skills are agent-teachable knowledge bundles. Install them into your project
 so AI agents can use them during development.
 
-### bootstrap
+### codervisor-forge
 
-**Scaffold a new Rust+Node.js hybrid project with all forge skills.**
-
-| Attribute | Value |
-|-----------|-------|
-| Status | Complete |
-| Audience | New projects or repos adding forge infrastructure |
-| Requirements | None (orchestrates other skills) |
-| Directory | [`skills/bootstrap/`](../skills/bootstrap/) |
-
-**Use when:** Starting a new Rust+Node.js project, or adding forge infrastructure
-to an existing repository.
-
-**Includes:**
-- SKILL.md — Bootstrap flow, decision tree, scaffold steps
-- 2 reference docs — project structure, post-bootstrap checklist
-- Templates — Root configs (package.json, Cargo.toml, pnpm-workspace.yaml, turbo.json), publish.config.ts, AGENTS.md, .lean-spec/config.json, .gitignore
-
----
-
-### leanspec-sdd
-
-**Spec-Driven Development methodology for AI-assisted development.**
+**Complete toolkit: bootstrap, CI/CD, npm publishing, and versioning for Rust+Node.js hybrid projects.**
 
 | Attribute | Value |
 |-----------|-------|
 | Status | Complete |
-| Audience | Any LeanSpec project |
-| Requirements | LeanSpec CLI or MCP server |
-| Directory | [`skills/leanspec-sdd/`](../skills/leanspec-sdd/) |
+| Audience | Rust+Node.js hybrid projects |
+| Requirements | None |
+| Directory | [`skills/codervisor-forge/`](../skills/codervisor-forge/) |
 
-**Use when:** Working with specs, planning features, multi-step changes, or any task
-involving a `specs/` folder or `.lean-spec/config.json`.
+**Use when:** Starting a new Rust+Node.js project, setting up CI/CD, publishing
+Rust binaries to npm, managing monorepo versions, or debugging pipeline failures.
 
-**Includes:**
-- SKILL.md — Core SDD workflow, tool reference, relationship management
-- 5 reference docs — workflow, best practices, examples, commands, workflows
-- Validation script — `scripts/validate-spec.sh`
-
----
-
-### rust-npm-publish
-
-**Distribute Rust binaries via npm platform packages.**
-
-| Attribute | Value |
-|-----------|-------|
-| Status | References complete, templates in progress |
-| Audience | Any Rust+npm project |
-| Pairs with | `rust-cross-build` action, `hybrid-ci` skill |
-| Directory | [`skills/rust-npm-publish/`](../skills/rust-npm-publish/) |
-
-**Use when:** Publishing Rust CLI tools to npm, setting up cross-platform binary
-distribution, or debugging publish pipeline failures.
+**Covers four domains:**
+- **Bootstrap** — Scaffold a new project with all infrastructure
+- **CI/CD** — GitHub Actions workflows for build, test, cross-compilation
+- **Publishing** — Distribute Rust binaries via npm platform packages
+- **Versioning** — Coordinated versions across Node.js and Rust packages
 
 **Includes:**
-- SKILL.md — The optionalDependencies pattern, pipeline overview, config format
-- 4 reference docs — publish pipeline, platform matrix, version strategy, troubleshooting
-- Type definitions — `templates/types.ts` (PublishConfig interface)
-- Script templates — Config-driven starter scripts for the publish pipeline
-- 2 examples — Real configs from clawden and lean-spec projects
+- SKILL.md — Decision tree, all four domains, platform matrix, troubleshooting
+- 7 reference docs — project structure, checklist, platform matrix, publish pipeline, version strategy, workspace protocol, troubleshooting
+- Templates — Root configs, workflow YAMLs, action READMEs, publish scripts, CLI wrapper
+- 2 examples — Real publish.config.ts from clawden and lean-spec projects
 
----
-
-### hybrid-ci
-
-**CI/CD for Rust+Node.js hybrid repos with GitHub Actions.**
-
-| Attribute | Value |
-|-----------|-------|
-| Status | SKILL.md complete, templates available |
-| Audience | Rust+Node monorepos |
-| Pairs with | All forge actions |
-| Directory | [`skills/hybrid-ci/`](../skills/hybrid-ci/) |
-
-**Use when:** Setting up CI for a project with both `Cargo.toml` and `package.json`,
-configuring cross-platform Rust builds, or debugging CI failures.
-
-**Includes:**
-- SKILL.md — CI/publish workflow architecture, caching, troubleshooting
-- Workflow templates — ci.yml, publish.yml, copilot-setup-steps.yml
-- Action templates — READMEs linking to the canonical actions
-
----
-
-### monorepo-version-sync
-
-**Coordinated versioning across packages and languages.**
-
-| Attribute | Value |
-|-----------|-------|
-| Status | SKILL.md complete, references and templates available |
-| Audience | Any polyglot monorepo |
-| Pairs with | `compute-version` action, `rust-npm-publish` skill |
-| Directory | [`skills/monorepo-version-sync/`](../skills/monorepo-version-sync/) |
-
-**Use when:** Managing versions across Node and Rust packages, publishing from
-pnpm workspaces, or debugging version mismatches.
-
-**Includes:**
-- SKILL.md — Single source of truth, sync flow, workspace protocol, dev versioning
-- 3 reference docs — version flow, workspace protocol, pre-release strategy
-- Script templates — sync-versions, prepare-publish, validate, restore, bump-dev
+> **Note:** The `leanspec-sdd` skill has moved to [`codervisor/lean-spec`](https://github.com/codervisor/lean-spec).
 
 ---
 
@@ -219,19 +142,18 @@ Skills and actions can be used independently or together:
 ### Independent Use
 
 - Use `setup-workspace` action alone for any Node.js project
-- Use `monorepo-version-sync` skill for any polyglot monorepo
-- Use `leanspec-sdd` skill for any project with specs
+- Use `codervisor-forge` skill for any Rust+Node.js hybrid project
+- Use `leanspec-sdd` skill (from [`codervisor/lean-spec`](https://github.com/codervisor/lean-spec)) for any project with specs
 
 ### Paired Use
 
-- `rust-npm-publish` skill + `rust-cross-build` action → Rust binary npm distribution
-- `monorepo-version-sync` skill + `compute-version` action → Version management
-- `hybrid-ci` skill + all actions → Complete CI/CD pipeline
+- `codervisor-forge` skill + all actions → Complete CI/CD pipeline
+- `codervisor-forge` + `leanspec-sdd` → Full development lifecycle
 
 ### Full Stack
 
-Use all four skills + all four actions for a complete Rust+Node.js hybrid CI/CD setup.
-The `publish.config.ts` pattern ties skills and actions together — a single config file
+Use `codervisor-forge` skill + all four actions for a complete Rust+Node.js hybrid CI/CD setup.
+The `publish.config.ts` pattern ties the skill and actions together — a single config file
 drives both agent knowledge and CI/CD behavior.
 
 ## Installation

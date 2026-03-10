@@ -128,7 +128,7 @@ See [references/checklist.md](./references/checklist.md) for the full post-boots
 After scaffolding, install the companion skill for spec-driven development:
 
 ```bash
-npx skills add codervisor/forge@leanspec-sdd -g -y
+npx skills add codervisor/lean-spec@leanspec-sdd -g -y
 ```
 
 ### Bootstrap Decision Tree

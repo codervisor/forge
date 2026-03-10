@@ -10,17 +10,16 @@ This project uses [forge](https://github.com/codervisor/forge) skills:
 
 | Skill | Description |
 |-------|-------------|
-| `leanspec-sdd` | Spec-Driven Development — plan before you code |
-| `rust-npm-publish` | Distribute Rust binaries via npm platform packages |
-| `hybrid-ci` | CI/CD for Rust+Node.js with GitHub Actions |
-| `monorepo-version-sync` | Coordinated versioning across packages and languages |
+| `leanspec-sdd` | Spec-Driven Development — plan before you code (from [codervisor/lean-spec](https://github.com/codervisor/lean-spec)) |
+| `codervisor-forge` | Bootstrap, CI/CD, publishing, and versioning for Rust+Node.js |
 
 ### Installing Skills
 
 If skills are not already available, install them:
 
 ```bash
-npx skills add codervisor/forge -g -y
+npx skills add codervisor/forge@codervisor-forge -g -y
+npx skills add codervisor/lean-spec@leanspec-sdd -g -y
 ```
 
 ## Conventions

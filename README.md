@@ -11,7 +11,6 @@ Agent-teachable knowledge bundles — each ships as `SKILL.md` + references + te
 | Skill | Description | Audience |
 |-------|-------------|----------|
 | [`codervisor-forge`](skills/codervisor-forge/) | Complete toolkit: bootstrap, CI/CD, npm publishing, and versioning for Rust+Node.js projects | Rust+Node.js hybrid projects |
-| [`leanspec-sdd`](skills/leanspec-sdd/) | Spec-Driven Development methodology for AI-assisted development | Any LeanSpec project |
 
 ### Reusable GitHub Actions
 
@@ -39,7 +38,6 @@ Skills can be installed via:
 ```bash
 # Via skills CLI
 npx skills add codervisor/forge@codervisor-forge -g -y
-npx skills add codervisor/forge@leanspec-sdd -g -y
 
 # Manual: copy skill directory to your project
 cp -r skills/codervisor-forge .github/skills/
