@@ -10,10 +10,8 @@ Agent-teachable knowledge bundles — each ships as `SKILL.md` + references + te
 
 | Skill | Description | Audience |
 |-------|-------------|----------|
+| [`codervisor-forge`](skills/codervisor-forge/) | Complete toolkit: bootstrap, CI/CD, npm publishing, and versioning for Rust+Node.js projects | Rust+Node.js hybrid projects |
 | [`leanspec-sdd`](skills/leanspec-sdd/) | Spec-Driven Development methodology for AI-assisted development | Any LeanSpec project |
-| [`rust-npm-publish`](skills/rust-npm-publish/) | Distribute Rust binaries via npm platform packages | Any Rust+npm project |
-| [`hybrid-ci`](skills/hybrid-ci/) | CI/CD for Rust+Node.js hybrid repos with GitHub Actions | Rust+Node monorepos |
-| [`monorepo-version-sync`](skills/monorepo-version-sync/) | Coordinated versioning across packages and languages | Any polyglot monorepo |
 
 ### Reusable GitHub Actions
 
@@ -39,14 +37,12 @@ Composite actions usable from any GitHub Actions workflow:
 Skills can be installed via:
 
 ```bash
-# Via LeanSpec CLI
-lean-spec skill install codervisor/forge --skill rust-npm-publish
-
-# Via combo-skills
-npx combo-skills install codervisor/forge/skills/rust-npm-publish
+# Via skills CLI
+npx skills add codervisor/forge@codervisor-forge -g -y
+npx skills add codervisor/forge@leanspec-sdd -g -y
 
 # Manual: copy skill directory to your project
-cp -r skills/rust-npm-publish .github/skills/
+cp -r skills/codervisor-forge .github/skills/
 ```
 
 ### GitHub Actions
