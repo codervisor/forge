@@ -1,6 +1,9 @@
 # Skill Authoring Guide
 
-How to create, structure, and maintain agent skills in the forge repository.
+How to create, structure, and maintain agent skills in the forge shared skills repository.
+
+Forge is the central skills repo for all Codervisor projects (Ising, Cueless, Synodic, etc.).
+Skills added here are available to any consuming project.
 
 ## Skill Structure
 
@@ -167,6 +170,25 @@ how the skill's templates and patterns look in production.
 - Add a comment header explaining the example
 - Keep examples complete — they should work as-is in their source project
 
+## Cross-Project Skills
+
+Since forge serves multiple projects, keep these principles in mind:
+
+- **Project-agnostic by default** — skills should work for any project that matches the activation triggers, not just one specific repo
+- **Config-driven** — use template customization markers (`# CUSTOMIZE:`) so each consuming project can adapt
+- **Document the audience** — if a skill targets a specific stack (e.g., Rust+Node.js), say so in frontmatter and "When to Use"
+- **Avoid hardcoded project names** — use config values instead of literal project names in templates
+
+### Naming Convention
+
+Skill names should reflect their domain, not the consuming project:
+
+| Good | Bad |
+|------|-----|
+| `codervisor-forge` | `ising-ci` |
+| `rust-node-publish` | `cueless-setup` |
+| `monorepo-versioning` | `synodic-scripts` |
+
 ## Checklist
 
 Before submitting a new skill or updating an existing one:
@@ -179,3 +201,5 @@ Before submitting a new skill or updating an existing one:
 - [ ] Skill name is kebab-case and matches directory name
 - [ ] "When to Use" section has concrete, detectable triggers
 - [ ] Code examples are minimal and correct
+- [ ] `docs/catalog.md` is updated with the new skill entry
+- [ ] Skill is project-agnostic (uses config-driven templates, not hardcoded values)
