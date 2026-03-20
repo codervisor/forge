@@ -132,6 +132,43 @@ up after merging.
 
 ---
 
+### github-integration
+
+**Enable `gh` CLI in Claude Code cloud and other cloud-based AI coding environments.**
+
+| Attribute | Value |
+|-----------|-------|
+| Status | Complete |
+| Audience | Any project using GitHub |
+| Requirements | `gh` CLI (pre-installed in cloud sessions) |
+| Directory | [`skills/github-integration/`](../skills/github-integration/) |
+
+**Use when:** Setting up a repo so Claude Code cloud can create PRs and issues,
+adding `copilot-setup-steps.yml`, troubleshooting `gh` auth failures in cloud
+sessions, or configuring `GITHUB_TOKEN` for headless environments.
+
+**Covers:**
+- `copilot-setup-steps.yml` setup and customization
+- `gh` authentication via `GITHUB_TOKEN` / `GH_TOKEN`
+- Token scopes and permissions
+- Troubleshooting auth failures, 401/403 errors, and rate limiting
+- Common `gh` commands for AI agents (PRs, issues, API)
+
+**References:**
+
+| File | Purpose |
+|------|---------|
+| `references/cloud-auth.md` | Token auth, scopes, and troubleshooting |
+| `references/copilot-setup-steps.md` | Full guide to customizing the setup workflow |
+
+**Templates:**
+
+| File | Purpose |
+|------|---------|
+| `templates/copilot-setup-steps.yml` | Ready-to-install setup workflow with multi-stack support |
+
+---
+
 ## Installation
 
 ```bash

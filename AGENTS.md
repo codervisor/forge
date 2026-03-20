@@ -18,6 +18,7 @@ Shared agent skills for Codervisor projects (Ising, Cueless, Synodic, and others
 | `rust-npm-publish` | Publish Rust binaries to npm via the optionalDependencies platform package pattern | Ising, Cueless, Synodic |
 | `rust-node-ci` | GitHub Actions CI/CD workflows and installable composite actions | Ising, Cueless, Synodic |
 | `parallel-worktrees` | Parallel AI agent sessions in git worktrees with GitHub PR sync | Any |
+| `github-integration` | Enable `gh` CLI in Claude Code cloud and other cloud AI coding environments | Any |
 
 ## Consuming Projects
 
