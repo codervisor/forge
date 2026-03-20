@@ -1,6 +1,14 @@
 # Forge Catalog
 
-Complete guide to all skills and actions in the forge repository.
+Complete guide to all skills and actions in the forge shared skills repository.
+
+## Consuming Projects
+
+| Project | Repository | Skills Used |
+|---------|------------|-------------|
+| Ising | [`codervisor/ising`](https://github.com/codervisor/ising) | `codervisor-forge` |
+| Cueless | [`codervisor/cueless`](https://github.com/codervisor/cueless) | `codervisor-forge` |
+| Synodic | [`codervisor/synodic`](https://github.com/codervisor/synodic) | `codervisor-forge` |
 
 ## Skills
 
