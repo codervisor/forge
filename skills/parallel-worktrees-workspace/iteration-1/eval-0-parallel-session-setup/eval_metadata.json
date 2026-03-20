@@ -1,0 +1,31 @@
+{
+  "eval_id": 0,
+  "eval_name": "parallel-session-setup",
+  "prompt": "I want to run two Claude sessions at the same time — one working on a new auth feature and one fixing a bug in the API. How do I set that up without them conflicting?",
+  "assertions": [
+    {
+      "id": "e0-worktree-command",
+      "text": "Response includes the `git worktree add` command",
+      "type": "contains_text",
+      "value": "git worktree add"
+    },
+    {
+      "id": "e0-two-branches",
+      "text": "Response creates or names two distinct branches (one for auth, one for bug/fix)",
+      "type": "llm_judge",
+      "criteria": "The response recommends using two separate branch names — one for the auth feature and one for the API bug fix"
+    },
+    {
+      "id": "e0-agent-scoping",
+      "text": "Response explains how to scope each agent to its own worktree directory",
+      "type": "llm_judge",
+      "criteria": "The response explains that each agent session should be pointed at (or scoped to) its own worktree working directory, so it doesn't see or touch the other session's files"
+    },
+    {
+      "id": "e0-isolation-principle",
+      "text": "Response conveys the one-agent-one-worktree-one-branch rule or equivalent isolation advice",
+      "type": "llm_judge",
+      "criteria": "The response makes clear that the two sessions should be isolated — they should not share a branch or working directory"
+    }
+  ]
+}

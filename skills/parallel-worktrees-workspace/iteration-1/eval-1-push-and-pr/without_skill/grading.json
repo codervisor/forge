@@ -1,0 +1,36 @@
+{
+  "expectations": [
+    {
+      "text": "(e1-git-push) Response includes `git push` targeting the feat/payments branch",
+      "passed": true,
+      "evidence": "Line 19: `git push -u origin feat/payments` explicitly targets the feat/payments branch."
+    },
+    {
+      "text": "(e1-gh-pr-create) Response includes `gh pr create`",
+      "passed": true,
+      "evidence": "Line 35: `gh pr create --base main --head feat/payments --title \"Add payments feature\" --body \"Description of changes\"` and line 41: `gh pr create` (interactive form)."
+    },
+    {
+      "text": "(e1-pr-title) Response includes a `--title` flag or advises on a PR title format",
+      "passed": true,
+      "evidence": "Line 35 includes `--title \"Add payments feature\"` as part of the gh pr create command."
+    },
+    {
+      "text": "(e1-pr-body) Response includes a `--body` flag or advises on PR description content",
+      "passed": true,
+      "evidence": "Line 35 includes `--body \"Description of changes\"` as part of the gh pr create command."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_tokens": 9995,
+    "duration_ms": 35185,
+    "total_duration_seconds": 35.2
+  },
+  "eval_feedback": "The response fully satisfies all four assertions. It provides a clear `git push -u origin feat/payments` command targeting the correct branch, and a complete `gh pr create` invocation with both `--title` and `--body` flags. The response also covers interactive mode, browser-based alternatives, and worktree-specific caveats, making it thorough and practical."
+}

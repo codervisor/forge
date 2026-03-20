@@ -1,0 +1,36 @@
+{
+  "expectations": [
+    {
+      "text": "(e1-git-push) Response includes `git push` targeting the feat/payments branch",
+      "passed": true,
+      "evidence": "Line 30: `git push -u origin feat/payments` explicitly targets the feat/payments branch. Also appears in the quick reference summary on line 148."
+    },
+    {
+      "text": "(e1-gh-pr-create) Response includes `gh pr create`",
+      "passed": true,
+      "evidence": "Literal `gh pr create` appears multiple times: line 65 (full command with flags), line 97 (draft variant), and line 151 (quick reference summary)."
+    },
+    {
+      "text": "(e1-pr-title) Response includes a `--title` flag or advises on a PR title format",
+      "passed": true,
+      "evidence": "Line 66: `--title \"feat(payments): <short description of what you built>\"` — provides the flag with a conventional-commit-style format example."
+    },
+    {
+      "text": "(e1-pr-body) Response includes a `--body` flag or advises on PR description content",
+      "passed": true,
+      "evidence": "Lines 67–78: `--body \"$(cat <<'EOF' ... EOF)\"` with a structured template including Summary, Notes, and Test plan sections."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_tokens": 15733,
+    "duration_ms": 50961,
+    "total_duration_seconds": 51.0
+  },
+  "eval_feedback": "The response fully satisfies all four assertions. It provides a clear step-by-step guide covering git push targeting feat/payments, gh pr create with both --title and --body flags, a conventional commit title format, and a structured body template. The response is well-organized and includes additional useful context (force-with-lease, draft PRs, CI checks, post-merge cleanup) without omitting any required elements."
+}

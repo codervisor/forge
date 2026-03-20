@@ -1,0 +1,36 @@
+{
+  "expectations": [
+    {
+      "text": "(e2-single-owner) Response identifies a specific 'file owner' solution — one session owns routes.ts, the other is explicitly told not to modify it",
+      "passed": false,
+      "evidence": "Section 1 ('Coordinate Before Writing') says 'Assign ownership explicitly. Have one session handle all changes to routes.ts. The other session makes its route-related changes in a separate file.' This partially satisfies the assertion — it assigns ownership to one session and redirects the other — but it never explicitly instructs the user to re-brief the second session with a 'do NOT modify routes.ts' directive. The phrasing is a design recommendation, not an explicit re-briefing instruction for the other agent session."
+    },
+    {
+      "text": "(e2-ranked-options) Response ranks or prioritizes options (preferred approach first)",
+      "passed": true,
+      "evidence": "Section 1 is explicitly labeled '1. Coordinate Before Writing (Best Option)', making the preferred approach unambiguous. Remaining options are numbered 2–5 in descending preference order, and the summary table reinforces this ordering. This clearly satisfies the requirement to present options with priority ordering."
+    },
+    {
+      "text": "(e2-prs-as-channel) Response frames coordination through PRs/branches, not through shared state or cross-worktree reads",
+      "passed": false,
+      "evidence": "The response mentions branches and rebasing (Section 3) as a recovery strategy, but never explicitly frames PRs or branches as the coordination channel between parallel agent sessions. There is no mention of PRs at all. The response also never warns against cross-worktree reads or shared state — it does not address the coordination model between sessions at all, only the git mechanics of resolving conflicts after the fact."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 2,
+    "total": 3,
+    "pass_rate": 0.33
+  },
+  "timing": {
+    "executor_duration_seconds": 40.8
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Add an explicit re-briefing instruction: 'Tell the other session explicitly: do NOT touch routes.ts directly — route your changes through [mechanism].' The current response implies this but does not state it as an actionable agent instruction.",
+      "Frame PRs/branches as the coordination channel between sessions. The response should explain that agent sessions communicate through git artifacts (opening a PR, committing to a branch) rather than by reading each other's worktree files or sharing in-memory state.",
+      "Add a warning against cross-worktree reads — e.g., 'Do not have one agent session read files from another agent's worktree directory, as that creates implicit coupling and race conditions.' This is a key parallel-worktrees-specific concern the response entirely omits."
+    ],
+    "overall": "The response provides solid general git conflict-avoidance advice and clearly ranks options with 'Best Option' labeling. However, it fails on the two most specific parallel-agent-session concerns: it does not frame re-briefing the second agent with an explicit prohibition on touching routes.ts, and it does not address the coordination model (PRs/branches as the inter-session communication channel vs. cross-worktree reads). The response reads as generic multi-developer git advice rather than advice tailored to parallel AI agent sessions in worktrees."
+  }
+}

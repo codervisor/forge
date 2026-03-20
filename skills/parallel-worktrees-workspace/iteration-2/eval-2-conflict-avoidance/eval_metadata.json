@@ -1,0 +1,25 @@
+{
+  "eval_id": 2,
+  "eval_name": "conflict-avoidance",
+  "prompt": "I have three agent sessions running in parallel worktrees. Two of them both touch routes.ts — what do I do to avoid a merge conflict disaster?",
+  "assertions": [
+    {
+      "id": "e2-single-owner",
+      "text": "Response identifies a specific 'file owner' solution — one session owns routes.ts",
+      "type": "llm_judge",
+      "criteria": "The response recommends assigning routes.ts to exactly one session, and re-briefing the other session to NOT modify routes.ts directly (instead exporting a config or module that the owner session imports)"
+    },
+    {
+      "id": "e2-ranked-options",
+      "text": "Response ranks or prioritizes options (preferred approach first)",
+      "type": "llm_judge",
+      "criteria": "The response presents multiple options and makes clear which is preferred or recommended first — e.g., labels them as '1. preferred', '2. if sessions are already deep', '3. last resort', or equivalent priority ordering"
+    },
+    {
+      "id": "e2-prs-as-channel",
+      "text": "Response frames coordination through PRs/branches, not through shared state or cross-worktree reads",
+      "type": "llm_judge",
+      "criteria": "The response makes clear that agent sessions should coordinate through git artifacts (branches, PRs, commits) rather than by reading each other's worktree files or sharing in-memory state"
+    }
+  ]
+}

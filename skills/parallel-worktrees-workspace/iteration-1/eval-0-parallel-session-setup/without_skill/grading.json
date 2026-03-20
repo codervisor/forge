@@ -1,0 +1,36 @@
+{
+  "expectations": [
+    {
+      "text": "(e0-worktree-command) Response includes the `git worktree add` command",
+      "passed": true,
+      "evidence": "Line 13-14 of the response contain: `git worktree add ../my-repo-auth feature/auth` and `git worktree add ../my-repo-bugfix fix/api-bug`, satisfying the literal text requirement."
+    },
+    {
+      "text": "(e0-two-branches) Response creates or names two distinct branches (one for auth, one for bug/fix)",
+      "passed": true,
+      "evidence": "The response names two distinct branches: `feature/auth` for the auth feature and `fix/api-bug` for the API bug fix, each associated with its own worktree directory."
+    },
+    {
+      "text": "(e0-agent-scoping) Response explains how to scope each agent to its own worktree directory",
+      "passed": true,
+      "evidence": "The 'Running the Sessions' section instructs opening two terminals, each `cd`-ing into its respective worktree (`../my-repo-auth` and `../my-repo-bugfix`), and starting the Claude session there. It explicitly states 'Each Claude session operates entirely within its own directory.'"
+    },
+    {
+      "text": "(e0-isolation-principle) Response conveys the one-agent-one-worktree-one-branch rule or equivalent isolation advice",
+      "passed": true,
+      "evidence": "The summary states 'One worktree per Claude session, one branch per task. This is the standard, safe way to run parallel coding sessions without conflicts.' The response also explains that each worktree has its own working tree, index, and HEAD, and explicitly warns against sharing a directory with two sessions."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_tokens": 10374,
+    "duration_ms": 44658,
+    "total_duration_seconds": 44.7
+  },
+  "eval_feedback": "The response is thorough and well-structured. It immediately recommends git worktrees, provides the exact commands with two distinct branch names (feature/auth, fix/api-bug), explains how to scope each agent session to its own directory, and clearly articulates the isolation principle ('one worktree per Claude session, one branch per task'). All four assertions pass. The response also includes useful bonus content: cleanup commands, a comparison table, an alternative approach (separate clones), and practical tips — none of which detract from correctness."
+}

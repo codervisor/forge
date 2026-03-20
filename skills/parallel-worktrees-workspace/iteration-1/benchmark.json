@@ -1,0 +1,173 @@
+{
+  "metadata": {
+    "skill_name": "parallel-worktrees",
+    "skill_path": "/Users/marvzhang/projects/codervisor/forge/skills/parallel-worktrees",
+    "executor_model": "claude-sonnet-4-6",
+    "analyzer_model": "claude-sonnet-4-6",
+    "timestamp": "2026-03-20T09:25:02Z",
+    "evals_run": ["parallel-session-setup", "push-and-pr", "conflict-avoidance"],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "parallel-session-setup",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 75.3,
+        "tokens": 22094,
+        "tool_calls": 8,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response includes the `git worktree add` command", "passed": true, "evidence": "`git worktree add` appears multiple times with concrete examples"},
+        {"text": "Response creates or names two distinct branches (one for auth, one for bug/fix)", "passed": true, "evidence": "Two distinct branches created: feat/auth and fix/api-bug"},
+        {"text": "Response explains how to scope each agent to its own worktree directory", "passed": true, "evidence": "Explicit session briefs with absolute working directory paths provided"},
+        {"text": "Response conveys the one-agent-one-worktree-one-branch rule or equivalent isolation advice", "passed": true, "evidence": "Dedicated 'Cardinal Rule' section: 'One agent, one worktree, one branch'"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "parallel-session-setup",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 44.7,
+        "tokens": 10374,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response includes the `git worktree add` command", "passed": true, "evidence": "`git worktree add` appears twice with concrete examples"},
+        {"text": "Response creates or names two distinct branches (one for auth, one for bug/fix)", "passed": true, "evidence": "Two distinct branch names: feature/auth and fix/api-bug"},
+        {"text": "Response explains how to scope each agent to its own worktree directory", "passed": true, "evidence": "'Running the Sessions' section tells user to cd into each worktree directory"},
+        {"text": "Response conveys the one-agent-one-worktree-one-branch rule or equivalent isolation advice", "passed": true, "evidence": "Closes with 'One worktree per Claude session, one branch per task'"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "push-and-pr",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 51.0,
+        "tokens": 15733,
+        "tool_calls": 6,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response includes `git push` targeting the feat/payments branch", "passed": true, "evidence": "`git push -u origin feat/payments` explicitly in the response"},
+        {"text": "Response includes `gh pr create`", "passed": true, "evidence": "`gh pr create` appears three times"},
+        {"text": "Response includes a `--title` flag or advises on a PR title format", "passed": true, "evidence": "`--title \"feat(payments): <short description>\"` with conventional commit format"},
+        {"text": "Response includes a `--body` flag or advises on PR description content", "passed": true, "evidence": "`--body \"$(cat <<'EOF' ... EOF)\"` with structured template"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "push-and-pr",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 35.2,
+        "tokens": 9995,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response includes `git push` targeting the feat/payments branch", "passed": true, "evidence": "`git push -u origin feat/payments` on line 19"},
+        {"text": "Response includes `gh pr create`", "passed": true, "evidence": "`gh pr create` appears on line 35"},
+        {"text": "Response includes a `--title` flag or advises on a PR title format", "passed": true, "evidence": "`--title \"Add payments feature\"` on line 35"},
+        {"text": "Response includes a `--body` flag or advises on PR description content", "passed": true, "evidence": "`--body \"Description of changes\"` on line 35"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "conflict-avoidance",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 48.9,
+        "tokens": 16295,
+        "tool_calls": 5,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response recommends assigning routes.ts to only one session or otherwise isolating who owns it", "passed": true, "evidence": "Explicitly recommends assigning routes.ts ownership to one session with sample re-briefing 'Do NOT modify routes.ts'"},
+        {"text": "Response gives at least one concrete, actionable option", "passed": true, "evidence": "Three concrete options with numbered steps, sample prompts, and exact bash commands"},
+        {"text": "Response mentions rebase or merge ordering, or sequencing sessions", "passed": true, "evidence": "Option 2 covers sequencing; Option 3 covers rebase gate with `git rebase origin/main` commands"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "conflict-avoidance",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 35.0,
+        "tokens": 10327,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response recommends assigning routes.ts to only one session or otherwise isolating who owns it", "passed": true, "evidence": "Recommends serializing sessions (Option 1) and splitting routes.ts into per-feature files (Option 3)"},
+        {"text": "Response gives at least one concrete, actionable option", "passed": true, "evidence": "Four concrete options with step-by-step instructions and specific git commands"},
+        {"text": "Response mentions rebase or merge ordering, or sequencing sessions", "passed": true, "evidence": "Option 1 recommends rebasing the second worktree; checklist repeats sequencing guidance"}
+      ],
+      "notes": []
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 58.4, "stddev": 13.5, "min": 48.9, "max": 75.3},
+      "tokens": {"mean": 18041, "stddev": 3302, "min": 15733, "max": 22094}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 38.3, "stddev": 5.2, "min": 35.0, "max": 44.7},
+      "tokens": {"mean": 10232, "stddev": 197, "min": 9995, "max": 10374}
+    },
+    "delta": {
+      "pass_rate": "+0.00",
+      "time_seconds": "+20.1s",
+      "tokens": "+7809"
+    }
+  },
+  "notes": [
+    "All assertions pass 100% in both configurations — these assertions are non-discriminating for a capable model. Claude already knows git worktree mechanics well enough without the skill.",
+    "The real value of the skill is qualitative: structured briefing templates for agents, explicit file-ownership doctrine, PR-as-coordination-channel pattern, draft PR workflow for parallel sessions, and the --force-with-lease / rebase-before-push discipline. These don't show up in binary pass/fail.",
+    "With-skill runs are 20s slower and use ~7800 more tokens on average (reading skill + reference files). This is the cost of the skill.",
+    "Better discriminating assertions would check for: (1) explicit agent briefing template with working-dir + scope + out-of-scope, (2) rebase-before-push advice, (3) draft PR recommendation for in-progress sessions, (4) post-merge cleanup sequence (worktree remove + prune).",
+    "The eval set should be redesigned to test skill-unique knowledge rather than general git knowledge."
+  ]
+}

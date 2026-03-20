@@ -1,0 +1,39 @@
+{
+  "expectations": [
+    {
+      "text": "Response recommends rebasing on origin/main BEFORE pushing",
+      "passed": true,
+      "evidence": "Step 2 explicitly instructs 'git fetch origin' followed by 'git rebase origin/main' before Step 3 (Push the branch). The summary at the bottom also shows '# 1. Sync: git fetch origin && git rebase origin/main' listed before '# 2. Push'."
+    },
+    {
+      "text": "Response mentions `--force-with-lease` for pushing after a rebase",
+      "passed": true,
+      "evidence": "Lines 43 and 48 contain the literal text '--force-with-lease'. The response says 'If you rebased after a previous push, use --force-with-lease instead' and provides the command 'git push --force-with-lease'."
+    },
+    {
+      "text": "Response includes post-merge cleanup: worktree remove + branch delete + prune",
+      "passed": true,
+      "evidence": "The 'After the PR merges' section includes all three steps: 'git worktree remove ../myrepo-wt/feat/payments', 'git branch -d feat/payments', and 'git worktree prune'. These are also echoed in the summary section."
+    },
+    {
+      "text": "Response uses conventional commits format for the PR title (type(scope): subject)",
+      "passed": true,
+      "evidence": "The gh pr create command uses '--title \"feat(payments): <short description of what you built>\"', which follows the conventional commits format type(scope): subject. The summary also shows 'gh pr create --title \"feat(payments): ...\"'."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "executor_duration_seconds": 46.6
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "The response is well-structured and covers all required elements. One minor improvement: the force-with-lease guidance could be more prominently placed — it is currently conditional ('if you rebased after a previous push'), but since Step 2 always does a rebase, the force-with-lease push could be presented as the default push command when a prior push exists."
+    ],
+    "overall": "Excellent response. All four assertions pass. The response correctly sequences rebase before push, mentions --force-with-lease with proper context, includes the full post-merge cleanup sequence (worktree remove, branch delete, prune), and demonstrates conventional commit format in the PR title example. The response is well-organized and worktree-aware."
+  }
+}

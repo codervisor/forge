@@ -1,0 +1,174 @@
+{
+  "metadata": {
+    "skill_name": "parallel-worktrees",
+    "skill_path": "/Users/marvzhang/projects/codervisor/forge/skills/parallel-worktrees",
+    "executor_model": "claude-sonnet-4-6",
+    "analyzer_model": "claude-sonnet-4-6",
+    "timestamp": "2026-03-20T09:55:00Z",
+    "evals_run": ["parallel-session-setup", "push-and-pr", "conflict-avoidance"],
+    "runs_per_configuration": 1
+  },
+  "runs": [
+    {
+      "eval_id": 0,
+      "eval_name": "parallel-session-setup",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 67.0,
+        "tokens": 21721,
+        "tool_calls": 7,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response includes a structured agent brief with at least 3 of: working directory path, branch name, what to do, what NOT to touch", "passed": true, "evidence": "Both session briefs include all four elements: absolute path, branch name, task description, and explicit 'do not touch' scope"},
+        {"text": "Response explicitly tells each agent what NOT to touch (negative scope)", "passed": true, "evidence": "Each brief has explicit negative scope: 'Do not modify src/api/' and 'Do not modify src/auth/'"},
+        {"text": "Response recommends opening draft PRs for in-progress parallel sessions", "passed": true, "evidence": "Explicitly recommends `gh pr create --draft` with a note to use `gh pr ready` when done"},
+        {"text": "Response addresses how to merge the two PRs (one at a time, rebase the other after)", "passed": true, "evidence": "'Merge one PR at a time' section with 3-step process: merge one, rebase second on updated main, merge second"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 0,
+      "eval_name": "parallel-session-setup",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": 32.8,
+        "tokens": 10273,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response includes a structured agent brief with at least 3 of: working directory path, branch name, what to do, what NOT to touch", "passed": false, "evidence": "No structured agent brief. Working directory and branch appear in shell commands only — no template combining path + branch + scope + negative scope"},
+        {"text": "Response explicitly tells each agent what NOT to touch (negative scope)", "passed": false, "evidence": "No negative scope guidance. Response relies on filesystem isolation rather than instructing agents what to avoid"},
+        {"text": "Response recommends opening draft PRs for in-progress parallel sessions", "passed": false, "evidence": "Draft PRs never mentioned. No PR workflow content at all"},
+        {"text": "Response addresses how to merge the two PRs (one at a time, rebase the other after)", "passed": true, "evidence": "Briefly states 'finish and merge the bug fix branch first, then rebase the auth feature branch on top' — appears as conditional advice rather than primary recommendation"}
+      ],
+      "notes": ["Response teaches git mechanics rather than agent coordination — technically correct but wrong abstraction level"]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "push-and-pr",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 4,
+        "failed": 0,
+        "total": 4,
+        "time_seconds": 46.6,
+        "tokens": 15756,
+        "tool_calls": 6,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response recommends rebasing on origin/main BEFORE pushing", "passed": true, "evidence": "Step 2 explicitly runs `git fetch origin && git rebase origin/main` before the push step"},
+        {"text": "Response mentions `--force-with-lease` for pushing after a rebase", "passed": true, "evidence": "Literal `--force-with-lease` appears with correct conditional guidance: 'if you rebased after a previous push'"},
+        {"text": "Response includes post-merge cleanup: worktree remove + branch delete + prune", "passed": true, "evidence": "'After the PR merges' section contains all three: `git worktree remove`, `git branch -d`, and `git worktree prune`"},
+        {"text": "Response uses conventional commits format for the PR title (type(scope): subject)", "passed": true, "evidence": "`gh pr create` example uses `--title \"feat(payments): <short description>\"`"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "push-and-pr",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.25,
+        "passed": 1,
+        "failed": 3,
+        "total": 4,
+        "time_seconds": 27.2,
+        "tokens": 9973,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response recommends rebasing on origin/main BEFORE pushing", "passed": false, "evidence": "No fetch/rebase step before pushing"},
+        {"text": "Response mentions `--force-with-lease` for pushing after a rebase", "passed": false, "evidence": "Literal `--force-with-lease` not mentioned anywhere"},
+        {"text": "Response includes post-merge cleanup: worktree remove + branch delete + prune", "passed": false, "evidence": "Includes worktree remove and branch delete but omits `git worktree prune`"},
+        {"text": "Response uses conventional commits format for the PR title (type(scope): subject)", "passed": true, "evidence": "Uses `feat(payments): ...` in both commit and PR title examples"}
+      ],
+      "notes": ["Skipped 3 key best practices: upstream sync before push, safe force-push, complete cleanup sequence"]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "conflict-avoidance",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 1.0,
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "time_seconds": 55.3,
+        "tokens": 16549,
+        "tool_calls": 6,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response identifies a specific 'file owner' solution — one session owns routes.ts, the other is explicitly told not to modify it", "passed": true, "evidence": "Option 1 names one session as owner and re-briefs the other with 'Do not touch routes.ts'"},
+        {"text": "Response ranks or prioritizes options (preferred approach first)", "passed": true, "evidence": "Section titled 'Your Options, From Best to Worst.' Option 1 labeled '(Recommended)', Option 4 described as 'the fallback, not the plan'"},
+        {"text": "Response frames coordination through PRs/branches, not through shared state or cross-worktree reads", "passed": true, "evidence": "All coordination through git artifacts: PRs merge in sequence, branches rebase onto main, pre-merge checklist uses `gh pr list`"}
+      ],
+      "notes": []
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "conflict-avoidance",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "pass_rate": 0.33,
+        "passed": 1,
+        "failed": 2,
+        "total": 3,
+        "time_seconds": 40.8,
+        "tokens": 10273,
+        "tool_calls": 2,
+        "errors": 0
+      },
+      "expectations": [
+        {"text": "Response identifies a specific 'file owner' solution — one session owns routes.ts, the other is explicitly told not to modify it", "passed": false, "evidence": "Assigns routes.ts to one session but never explicitly re-briefs the second with 'do NOT modify routes.ts' — reads as design recommendation, not agent re-briefing"},
+        {"text": "Response ranks or prioritizes options (preferred approach first)", "passed": true, "evidence": "Section 1 labeled '(Best Option)' and options numbered 1-5 with unambiguous priority ordering"},
+        {"text": "Response frames coordination through PRs/branches, not through shared state or cross-worktree reads", "passed": false, "evidence": "Mentions branches/rebasing as recovery mechanics but never frames PRs as coordination channel and makes no mention of cross-worktree read dangers"}
+      ],
+      "notes": ["Solid general git conflict advice but lacks parallel-AI-agent-session framing — treats this as standard multi-developer workflow"]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {"mean": 1.0, "stddev": 0.0, "min": 1.0, "max": 1.0},
+      "time_seconds": {"mean": 56.3, "stddev": 10.2, "min": 46.6, "max": 67.0},
+      "tokens": {"mean": 18009, "stddev": 2999, "min": 15756, "max": 21721}
+    },
+    "without_skill": {
+      "pass_rate": {"mean": 0.27, "stddev": 0.05, "min": 0.25, "max": 0.33},
+      "time_seconds": {"mean": 33.6, "stddev": 6.6, "min": 27.2, "max": 40.8},
+      "tokens": {"mean": 10173, "stddev": 174, "min": 9973, "max": 10373}
+    },
+    "delta": {
+      "pass_rate": "+0.73",
+      "time_seconds": "+22.7s",
+      "tokens": "+7836"
+    }
+  },
+  "notes": [
+    "Strong +73% pass rate delta in iteration 2 — the redesigned assertions successfully discriminate skill value.",
+    "Skill uniquely provides: structured agent briefing template (path+branch+scope+negative-scope), draft PR workflow for in-progress sessions, rebase-before-push discipline, --force-with-lease for safe force pushes, complete cleanup sequence including git worktree prune, and PRs-as-coordination-channel framing.",
+    "Baseline passes on: git worktree add mechanics, conventional commits title format, basic numbered option ranking — things Claude knows natively.",
+    "Key insight: the skill's differentiation is agent coordination abstraction, not git mechanics. Baseline treats these as standard developer workflows; skill treats them as parallel AI agent sessions requiring explicit scoping and coordination patterns.",
+    "With-skill runs use ~7800 more tokens on average and take ~23s longer — cost of reading skill + reference files. Worthwhile given the qualitative depth added.",
+    "Iteration 1 assertions were non-discriminating (100% both ways) because they tested git knowledge Claude already has. Iteration 2 assertions test agent-workflow-specific patterns."
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "eval_id": 1,
+  "eval_name": "push-and-pr",
+  "prompt": "I'm in a worktree on branch feat/payments and I've finished my changes. Walk me through pushing this and opening a PR on GitHub.",
+  "assertions": [
+    {
+      "id": "e1-rebase-first",
+      "text": "Response recommends rebasing on origin/main BEFORE pushing",
+      "type": "llm_judge",
+      "criteria": "The response recommends running `git fetch origin && git rebase origin/main` (or equivalent) BEFORE pushing the branch, to keep history linear and avoid conflicts"
+    },
+    {
+      "id": "e1-force-with-lease",
+      "text": "Response mentions `--force-with-lease` for pushing after a rebase",
+      "type": "contains_text",
+      "value": "--force-with-lease"
+    },
+    {
+      "id": "e1-cleanup-sequence",
+      "text": "Response includes post-merge cleanup: worktree remove + branch delete + prune",
+      "type": "llm_judge",
+      "criteria": "The response describes the cleanup steps after the PR merges: removing the local worktree (git worktree remove), deleting the local branch (git branch -d), and pruning stale entries (git worktree prune)"
+    },
+    {
+      "id": "e1-conventional-title",
+      "text": "Response uses conventional commits format for the PR title (type(scope): subject)",
+      "type": "llm_judge",
+      "criteria": "The response recommends or demonstrates a conventional commits style PR title, e.g. feat(payments): <description>"
+    }
+  ]
+}

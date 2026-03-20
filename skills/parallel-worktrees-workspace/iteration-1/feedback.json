@@ -1,0 +1,15 @@
+{
+  "reviews": [
+    {
+      "run_id": "eval-0-parallel-session-setup-without_skill",
+      "feedback": "The two are quite the same, even the with skill has ",
+      "timestamp": "2026-03-20T09:31:03.896Z"
+    },
+    {
+      "run_id": "eval-0-parallel-session-setup-with_skill",
+      "feedback": "we should use ../myrepo.worktrees",
+      "timestamp": "2026-03-20T09:31:03.896Z"
+    }
+  ],
+  "status": "in_progress"
+}

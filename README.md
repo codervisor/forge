@@ -1,52 +1,29 @@
 # forge
 
-Shared agent skills and reusable GitHub Actions for [Codervisor](https://github.com/codervisor) projects.
+Shared agent skills for [Codervisor](https://github.com/codervisor) projects.
 
 ## Consuming Projects
 
-| Project | Repository | What it uses from forge |
-|---------|------------|------------------------|
-| **Ising** | [`codervisor/ising`](https://github.com/codervisor/ising) | Skills, Actions |
-| **Cueless** | [`codervisor/cueless`](https://github.com/codervisor/cueless) | Skills, Actions |
-| **Synodic** | [`codervisor/synodic`](https://github.com/codervisor/synodic) | Skills, Actions |
+| Project | Repository | Skills |
+|---------|------------|--------|
+| **Ising** | [`codervisor/ising`](https://github.com/codervisor/ising) | `codervisor-forge` |
+| **Cueless** | [`codervisor/cueless`](https://github.com/codervisor/cueless) | `codervisor-forge` |
+| **Synodic** | [`codervisor/synodic`](https://github.com/codervisor/synodic) | `codervisor-forge` |
 
-> Any codervisor project can install skills from this repo. See [Installation](#installation) below.
-
-## What's Inside
-
-### Skills
+## Skills
 
 Agent-teachable knowledge bundles — each ships as `SKILL.md` + references + templates.
 
 | Skill | Description | Audience |
 |-------|-------------|----------|
-| [`codervisor-forge`](skills/codervisor-forge/) | Bootstrap, CI/CD, npm publishing, and versioning for Rust+Node.js projects | Rust+Node.js hybrid projects |
+| [`git-commit`](skills/git-commit/) | Conventional commits, atomic staging, hook failure recovery | Any |
+| [`rust-node-bootstrap`](skills/rust-node-bootstrap/) | Scaffold a new Rust+Node.js hybrid project with all infrastructure | Rust+Node.js hybrid projects |
+| [`rust-npm-publish`](skills/rust-npm-publish/) | Publish Rust binaries to npm via the platform package pattern | Rust+Node.js hybrid projects |
+| [`rust-node-ci`](skills/rust-node-ci/) | GitHub Actions CI/CD workflows and composite actions | Rust+Node.js hybrid projects |
 
-Skills are designed to be **shared across projects** — install only the ones relevant to your stack.
 See [docs/catalog.md](docs/catalog.md) for the full catalog.
 
-### Reusable GitHub Actions
-
-Composite actions usable from any GitHub Actions workflow:
-
-```yaml
-- uses: codervisor/forge/actions/setup-workspace@main
-  with:
-    node-version: '22'
-```
-
-| Action | Description |
-|--------|-------------|
-| [`setup-workspace`](actions/setup-workspace/) | Checkout + pnpm + Node.js + cache + install |
-| [`compute-version`](actions/compute-version/) | Compute effective version + npm tag (dev vs stable) |
-| [`rust-cross-build`](actions/rust-cross-build/) | Build Rust binaries for platform matrix |
-| [`wait-npm-propagation`](actions/wait-npm-propagation/) | Poll npm registry with exponential backoff |
-
 ## Installation
-
-### Skills
-
-Skills can be installed into any codervisor project:
 
 ```bash
 # Via skills CLI (recommended)
@@ -59,30 +36,15 @@ cp -r skills/<skill-name> .github/skills/
 git submodule add https://github.com/codervisor/forge.git .forge
 ```
 
-### GitHub Actions
-
-Reference directly in your workflows — no installation needed:
-
-```yaml
-jobs:
-  build:
-    steps:
-      - uses: codervisor/forge/actions/setup-workspace@v1
-        with:
-          node-version: '22'
-          pnpm-version: '10'
-```
+After installing a skill, copy any templates you need from `skills/<skill-name>/templates/`
+into your project. GitHub Actions go into `.github/actions/<name>/`, workflows into `.github/workflows/`.
 
 ## Adding a New Skill
-
-Forge is the central place for skills shared across codervisor projects. To add a new skill:
 
 1. Create `skills/<skill-name>/SKILL.md` following the [skill authoring guide](docs/skill-authoring.md)
 2. Add references, templates, and examples as needed
 3. Update [docs/catalog.md](docs/catalog.md) with the new skill entry
-4. Open a PR — skills are reviewed for token budget (< 3000 tokens) and completeness
-
-See [docs/skill-authoring.md](docs/skill-authoring.md) for the full authoring guide.
+4. Open a PR — skills are validated for token budget (< 3000 tokens) and structure
 
 ## Configuration
 

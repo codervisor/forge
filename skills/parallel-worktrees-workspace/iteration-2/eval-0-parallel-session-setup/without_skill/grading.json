@@ -1,0 +1,42 @@
+{
+  "expectations": [
+    {
+      "text": "(e0-briefing-template) Response includes a structured agent brief with at least 3 of: working directory path, branch name, what to do, what NOT to touch",
+      "passed": false,
+      "evidence": "The response provides git worktree setup steps and mentions directory paths and branch names incidentally (e.g. '../myproject-auth' and 'feature/auth'), but there is no structured agent briefing template. It does not include a brief covering what to do and what NOT to touch as a unified template for guiding an agent session."
+    },
+    {
+      "text": "(e0-out-of-scope) Response explicitly tells each agent what NOT to touch (negative scope)",
+      "passed": false,
+      "evidence": "The response contains no guidance on what each agent should NOT modify. There is no mention of 'do not touch' specific files, directories, or branches. The response only addresses isolation via separate working directories, not explicit negative scope instructions for agents."
+    },
+    {
+      "text": "(e0-draft-prs) Response recommends opening draft PRs for in-progress parallel sessions",
+      "passed": false,
+      "evidence": "The response makes no mention of GitHub draft PRs or any PR workflow. The entire response focuses on git worktree mechanics and does not address pull request management."
+    },
+    {
+      "text": "(e0-merge-ordering) Response addresses how to merge the two PRs (one at a time, rebase the other after)",
+      "passed": true,
+      "evidence": "Line 65 states: 'If you need to coordinate (e.g., the auth feature depends on the bug fix), finish and merge the bug fix branch first, then rebase the auth feature branch on top of it.' This addresses the merge ordering pattern, though it is presented as conditional guidance rather than a general recommendation."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 3,
+    "total": 4,
+    "pass_rate": 0.25
+  },
+  "timing": {
+    "executor_duration_seconds": 32.8
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Add a structured agent briefing template that includes at minimum: absolute working directory path, branch name, task description, and explicit list of files/directories the agent must NOT touch.",
+      "Include explicit negative scope for each parallel session — e.g. 'Session A (auth feature): do not modify src/api/, packages/core/. Session B (api bugfix): do not modify src/auth/, packages/ui/'.",
+      "Recommend opening GitHub draft PRs as soon as each session starts work, so work-in-progress is visible and reviewable before merging.",
+      "Make merge ordering a primary recommendation rather than a conditional note — clearly state that PRs should be merged one at a time and the second branch should be rebased onto main after the first merges."
+    ],
+    "overall": "The response correctly identifies git worktrees as the right isolation mechanism and covers basic setup well. However, it misses the agent-coordination layer entirely: no briefing template, no negative scope guidance, no draft PR workflow, and only a passing mention of merge ordering. For a user running two Claude sessions in parallel, the critical missing pieces are how to brief each agent clearly and how to manage the PR lifecycle — the response addresses neither."
+  }
+}

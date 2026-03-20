@@ -1,0 +1,31 @@
+{
+  "eval_id": 0,
+  "eval_name": "parallel-session-setup",
+  "prompt": "I want to run two Claude sessions at the same time — one working on a new auth feature and one fixing a bug in the API. How do I set that up without them conflicting?",
+  "assertions": [
+    {
+      "id": "e0-briefing-template",
+      "text": "Response includes a structured agent brief with at least 3 of: working directory path, branch name, what to do, what NOT to touch",
+      "type": "llm_judge",
+      "criteria": "The response provides a briefing template or example that includes at least three of the following for each agent session: (1) the absolute working directory path, (2) the branch name, (3) what the agent should work on, (4) what the agent should NOT modify or touch"
+    },
+    {
+      "id": "e0-out-of-scope",
+      "text": "Response explicitly tells each agent what NOT to touch (negative scope)",
+      "type": "llm_judge",
+      "criteria": "The response explicitly includes guidance on what each agent should NOT do or NOT modify — not just what it should do. For example, 'do not touch packages/ui' or 'do not modify routes.ts'"
+    },
+    {
+      "id": "e0-draft-prs",
+      "text": "Response recommends opening draft PRs for in-progress parallel sessions",
+      "type": "llm_judge",
+      "criteria": "The response recommends using draft PRs (GitHub draft pull requests) while work is still in progress in the worktrees, as a way to make parallel work visible"
+    },
+    {
+      "id": "e0-merge-ordering",
+      "text": "Response addresses how to merge the two PRs (one at a time, rebase the other after)",
+      "type": "llm_judge",
+      "criteria": "The response explains that PRs should be merged one at a time, and that after the first merges, the second session should rebase on main before it can be merged"
+    }
+  ]
+}

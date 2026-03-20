@@ -1,15 +1,13 @@
-name: Validate Skills & Actions
+name: Validate Skills
 
 on:
   push:
     branches: [main]
     paths:
       - 'skills/**'
-      - 'actions/**'
   pull_request:
     paths:
       - 'skills/**'
-      - 'actions/**'
 
 jobs:
   validate-skills:
@@ -122,80 +120,3 @@ jobs:
           fi
           echo ""
           echo "✅ All references resolve"
-
-  validate-actions:
-    name: Validate Actions
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Check action structure
-        shell: bash
-        run: |
-          set -euo pipefail
-          errors=0
-
-          for action_dir in actions/*/; do
-            action_name=$(basename "$action_dir")
-            echo "📦 Checking action: $action_name"
-
-            if [ ! -f "$action_dir/action.yml" ]; then
-              echo "  ❌ Missing action.yml"
-              errors=$((errors + 1))
-              continue
-            fi
-            echo "  ✅ action.yml exists"
-
-            # Check required fields
-            if ! grep -q '^name:' "$action_dir/action.yml"; then
-              echo "  ❌ Missing 'name' field"
-              errors=$((errors + 1))
-            fi
-
-            if ! grep -q '^description:' "$action_dir/action.yml"; then
-              echo "  ❌ Missing 'description' field"
-              errors=$((errors + 1))
-            fi
-
-            if ! grep -q "using: 'composite'" "$action_dir/action.yml" && \
-               ! grep -q 'using: "composite"' "$action_dir/action.yml" && \
-               ! grep -q 'using: composite' "$action_dir/action.yml"; then
-              echo "  ❌ Not a composite action (missing 'using: composite')"
-              errors=$((errors + 1))
-            else
-              echo "  ✅ Composite action"
-            fi
-          done
-
-          if [ $errors -gt 0 ]; then
-            echo ""
-            echo "❌ $errors error(s) found"
-            exit 1
-          fi
-          echo ""
-          echo "✅ All actions passed structure checks"
-
-      - name: Validate action YAML syntax
-        shell: bash
-        run: |
-          set -euo pipefail
-          errors=0
-
-          for action_yml in actions/*/action.yml; do
-            action_name=$(basename "$(dirname "$action_yml")")
-            # Use python to validate YAML syntax
-            if python3 -c "import yaml; yaml.safe_load(open('$action_yml'))" 2>/dev/null; then
-              echo "✅ $action_name: valid YAML"
-            else
-              echo "❌ $action_name: invalid YAML"
-              errors=$((errors + 1))
-            fi
-          done
-
-          if [ $errors -gt 0 ]; then
-            echo ""
-            echo "❌ $errors action(s) have invalid YAML"
-            exit 1
-          fi
-          echo ""
-          echo "✅ All action YAML files are valid"

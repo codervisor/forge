@@ -1,0 +1,36 @@
+{
+  "expectations": [
+    {
+      "text": "(e0-worktree-command) Response includes the `git worktree add` command",
+      "passed": true,
+      "evidence": "The response contains `git worktree add` multiple times, including in the step-by-step setup (e.g., `git worktree add ../myrepo-wt/feat/auth -b feat/auth`) and in the summary table."
+    },
+    {
+      "text": "(e0-two-branches) Response creates or names two distinct branches (one for auth, one for bug/fix)",
+      "passed": true,
+      "evidence": "The response explicitly creates two branches: `feat/auth` for the auth feature session and `fix/api-bug` for the API bug fix session."
+    },
+    {
+      "text": "(e0-agent-scoping) Response explains how to scope each agent to its own worktree directory",
+      "passed": true,
+      "evidence": "The response provides explicit session briefs with absolute working directory paths for each agent (e.g., `Working directory: /home/user/projects/myrepo-wt/feat/auth`) and states: 'The session brief must include the absolute working directory path so the agent never accidentally operates in the wrong place.'"
+    },
+    {
+      "text": "(e0-isolation-principle) Response conveys the one-agent-one-worktree-one-branch rule or equivalent isolation advice",
+      "passed": true,
+      "evidence": "The response has an explicit 'Cardinal Rule' section stating: 'One agent, one worktree, one branch. Two agents sharing a worktree will corrupt each other's index. Two agents on the same branch will produce conflicting history. Keep them completely separate.'"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_tokens": 22094,
+    "duration_ms": 75323,
+    "total_duration_seconds": 75.3
+  },
+  "eval_feedback": "The response is comprehensive and directly addresses all four assertions. It includes the `git worktree add` command with concrete examples tailored to the user's exact use case (auth feature + API bug fix), names two distinct branches (`feat/auth` and `fix/api-bug`), clearly scopes each agent to its own directory via explicit session briefs with absolute paths, and leads with a Cardinal Rule that articulates the one-agent-one-worktree-one-branch isolation principle. All four assertions pass with strong supporting evidence."
+}

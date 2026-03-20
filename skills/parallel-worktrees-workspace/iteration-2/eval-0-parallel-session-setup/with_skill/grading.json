@@ -1,0 +1,43 @@
+{
+  "expectations": [
+    {
+      "text": "(e0-briefing-template) Response includes a structured agent brief with at least 3 of: working directory path, branch name, what to do, what NOT to touch",
+      "passed": true,
+      "evidence": "The response includes explicit session briefs for both sessions (lines 57-73) containing all four elements: (1) absolute working directory path (e.g., '/home/user/myrepo-wt/feat/auth'), (2) branch name (e.g., 'feat/auth/jwt-login'), (3) what to work on (e.g., 'Implement JWT authentication in src/auth/*.ts'), and (4) what NOT to touch (e.g., 'Do not modify src/api/ or any database schema files'). The summary (line 177) also explicitly lists all four elements as required components of an agent brief."
+    },
+    {
+      "text": "(e0-out-of-scope) Response explicitly tells each agent what NOT to touch (negative scope)",
+      "passed": true,
+      "evidence": "Both session briefs include explicit negative scope. Session 1: 'Do not modify src/api/ or any database schema files.' Session 2: 'Do not modify src/auth/ or any schema files.' Additionally, the 'Are These Sessions Truly Independent?' section provides guidance on identifying shared files to assign to only one session."
+    },
+    {
+      "text": "(e0-draft-prs) Response recommends opening draft PRs for in-progress parallel sessions",
+      "passed": true,
+      "evidence": "Lines 101-107 explicitly recommend: 'If a session is still in progress when you push, open it as a draft PR to signal it\u2019s not ready for review yet' with the command 'gh pr create --draft --title \"...\" --body \"...\"' and shows how to mark it ready with 'gh pr ready'."
+    },
+    {
+      "text": "(e0-merge-ordering) Response addresses how to merge the two PRs (one at a time, rebase the other after)",
+      "passed": true,
+      "evidence": "The 'Merging When Both Are Done' section (lines 130-142) explicitly states 'Merge one PR at a time \u2014 don\u2019t merge both simultaneously, because the first merge changes main and the second PR needs to rebase on it.' It then provides a 3-step process: (1) merge one PR, (2) rebase the other worktree on updated main and force-push, (3) merge the second PR."
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 0,
+    "total": 4,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "executor_duration_seconds": 67.0
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "The response is comprehensive and well-structured. All four assertions are fully satisfied.",
+      "The agent briefs in Step 3 are particularly strong — they include all four recommended components (working directory, branch, task, and negative scope) in a clear, copy-pasteable format.",
+      "The draft PR guidance is appropriately placed in the PR creation step and clearly explains the purpose (signaling work-in-progress).",
+      "The merge ordering section clearly explains the rationale (first merge changes main) and provides concrete commands for the rebase step.",
+      "Minor improvement opportunity: the response could mention creating the draft PR immediately upon pushing the first commit (not just 'if in progress') to encourage the habit of early PR creation for visibility."
+    ],
+    "overall": "Excellent response. All four assertions pass. The response provides a complete, practical guide to running parallel Claude sessions using git worktrees, with concrete examples, agent briefs covering all required elements, explicit negative scope for each session, draft PR guidance, and clear merge ordering instructions."
+  }
+}

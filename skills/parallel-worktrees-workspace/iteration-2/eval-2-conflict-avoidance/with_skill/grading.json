@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "(e2-single-owner) Response identifies a specific 'file owner' solution — one session owns routes.ts, the other is explicitly told not to modify it",
+      "passed": true,
+      "evidence": "Option 1 explicitly names one session as the owner of routes.ts and re-briefs the other with: 'Do not touch routes.ts. When your work is ready, the route registration will be handled separately.' The summary table also reinforces this: 'Re-brief the one that doesn't need to own it; remove routes.ts from its scope.'"
+    },
+    {
+      "text": "(e2-ranked-options) Response ranks or prioritizes options (preferred approach first)",
+      "passed": true,
+      "evidence": "The section heading reads 'Your Options, From Best to Worst' and Option 1 is labeled '(Recommended)'. Option 4 is explicitly described as 'the fallback, not the plan.' The summary table also maps situations to best approaches, reinforcing the priority ordering."
+    },
+    {
+      "text": "(e2-prs-as-channel) Response frames coordination through PRs/branches, not through shared state or cross-worktree reads",
+      "passed": true,
+      "evidence": "All coordination mechanisms described use git artifacts: PRs merge in sequence, branches are rebased onto main (git rebase origin/main, git push --force-with-lease), and the pre-merge checklist uses 'gh pr list --json number,title,files' to detect conflicts. There is no mention of agents reading each other's worktree files or sharing state directly."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "executor_duration_seconds": 55.3
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "The response is strong across all three dimensions. One minor improvement opportunity: the re-briefing language for Session B (Option 1) could be even more explicit that the other session should not create any worktree-level workaround to read routes.ts from a sibling worktree — the current phrasing already implies this but does not say it outright.",
+      "The pre-merge checklist section adds practical tooling (gh pr list) that is a nice bonus beyond what the assertions require."
+    ],
+    "overall": "The response fully satisfies all three assertions. It cleanly identifies single-file ownership as the preferred solution, explicitly ranks four options from best to worst with clear labeling, and consistently frames all coordination through PRs and git rebase operations rather than any form of cross-worktree state sharing."
+  }
+}

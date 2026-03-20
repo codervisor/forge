@@ -1,0 +1,31 @@
+{
+  "eval_id": 1,
+  "eval_name": "push-and-pr",
+  "prompt": "I'm in a worktree on branch feat/payments and I've finished my changes. Walk me through pushing this and opening a PR on GitHub.",
+  "assertions": [
+    {
+      "id": "e1-git-push",
+      "text": "Response includes `git push` targeting the feat/payments branch",
+      "type": "contains_text",
+      "value": "git push"
+    },
+    {
+      "id": "e1-gh-pr-create",
+      "text": "Response includes `gh pr create`",
+      "type": "contains_text",
+      "value": "gh pr create"
+    },
+    {
+      "id": "e1-pr-title",
+      "text": "Response includes a `--title` flag or advises on a PR title format",
+      "type": "llm_judge",
+      "criteria": "The response includes the --title flag for gh pr create, or explains what the PR title should look like"
+    },
+    {
+      "id": "e1-pr-body",
+      "text": "Response includes a `--body` flag or advises on PR description content",
+      "type": "llm_judge",
+      "criteria": "The response mentions a --body flag or otherwise addresses what to put in the PR description"
+    }
+  ]
+}

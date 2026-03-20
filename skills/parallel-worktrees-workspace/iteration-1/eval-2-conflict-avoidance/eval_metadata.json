@@ -1,0 +1,25 @@
+{
+  "eval_id": 2,
+  "eval_name": "conflict-avoidance",
+  "prompt": "I have three agent sessions running in parallel worktrees. Two of them both touch routes.ts — what do I do to avoid a merge conflict disaster?",
+  "assertions": [
+    {
+      "id": "e2-file-isolation",
+      "text": "Response recommends assigning routes.ts to only one session or otherwise isolating who owns it",
+      "type": "llm_judge",
+      "criteria": "The response advises that only one agent session should modify routes.ts, or that the sessions touching it should be sequenced rather than run in parallel"
+    },
+    {
+      "id": "e2-concrete-options",
+      "text": "Response gives at least one concrete, actionable option",
+      "type": "llm_judge",
+      "criteria": "The response provides at least one specific action the user can take (e.g., reassign routes.ts to one session, stop one session and sequence it, or extract the routes.ts changes into a shared branch)"
+    },
+    {
+      "id": "e2-rebase-or-sequence",
+      "text": "Response mentions rebase or merge ordering, or sequencing sessions",
+      "type": "llm_judge",
+      "criteria": "The response mentions either rebasing/merging in a specific order, or sequencing one session after the other, as a way to manage the conflict"
+    }
+  ]
+}

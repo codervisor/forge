@@ -1,0 +1,92 @@
+{
+  "skill_name": "parallel-worktrees",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "I want to run two Claude sessions at the same time — one working on a new auth feature and one fixing a bug in the API. How do I set that up without them conflicting?",
+      "expected_output": "Step-by-step instructions for creating two git worktrees with separate branches, briefing each agent session with working directory and scope, and ensuring they work in isolation",
+      "assertions": [
+        {
+          "id": "e0-worktree-command",
+          "text": "Response includes the `git worktree add` command",
+          "type": "contains_text",
+          "value": "git worktree add"
+        },
+        {
+          "id": "e0-two-branches",
+          "text": "Response creates or names two distinct branches (one for auth, one for bug/fix)",
+          "type": "llm_judge",
+          "criteria": "The response recommends using two separate branch names — one for the auth feature and one for the API bug fix"
+        },
+        {
+          "id": "e0-agent-scoping",
+          "text": "Response explains how to scope each agent to its own worktree directory",
+          "type": "llm_judge",
+          "criteria": "The response explains that each agent session should be pointed at (or scoped to) its own worktree working directory, so it doesn't see or touch the other session's files"
+        },
+        {
+          "id": "e0-isolation-principle",
+          "text": "Response conveys the one-agent-one-worktree-one-branch rule or equivalent isolation advice",
+          "type": "llm_judge",
+          "criteria": "The response makes clear that the two sessions should be isolated — they should not share a branch or working directory"
+        }
+      ]
+    },
+    {
+      "id": 1,
+      "prompt": "I'm in a worktree on branch feat/payments and I've finished my changes. Walk me through pushing this and opening a PR on GitHub.",
+      "expected_output": "Clear instructions to push the branch with -u flag and use gh pr create with appropriate flags, title format, and PR body",
+      "assertions": [
+        {
+          "id": "e1-git-push",
+          "text": "Response includes `git push` targeting the feat/payments branch",
+          "type": "contains_text",
+          "value": "git push"
+        },
+        {
+          "id": "e1-gh-pr-create",
+          "text": "Response includes `gh pr create`",
+          "type": "contains_text",
+          "value": "gh pr create"
+        },
+        {
+          "id": "e1-pr-title",
+          "text": "Response includes a `--title` flag or advises on a PR title format",
+          "type": "llm_judge",
+          "criteria": "The response includes the --title flag for gh pr create, or explains what the PR title should look like"
+        },
+        {
+          "id": "e1-pr-body",
+          "text": "Response includes a `--body` flag or advises on PR description content",
+          "type": "llm_judge",
+          "criteria": "The response mentions a --body flag or otherwise addresses what to put in the PR description"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I have three agent sessions running in parallel worktrees. Two of them both touch routes.ts — what do I do to avoid a merge conflict disaster?",
+      "expected_output": "Explanation of file-level isolation strategy: assign routes.ts to only one session, or sequence the conflicting sessions, with concrete options",
+      "assertions": [
+        {
+          "id": "e2-file-isolation",
+          "text": "Response recommends assigning routes.ts to only one session or otherwise isolating who owns it",
+          "type": "llm_judge",
+          "criteria": "The response advises that only one agent session should modify routes.ts, or that the sessions touching it should be sequenced rather than run in parallel"
+        },
+        {
+          "id": "e2-concrete-options",
+          "text": "Response gives at least one concrete, actionable option",
+          "type": "llm_judge",
+          "criteria": "The response provides at least one specific action the user can take (e.g., reassign routes.ts to one session, stop one session and sequence it, or extract the routes.ts changes into a shared branch)"
+        },
+        {
+          "id": "e2-rebase-or-sequence",
+          "text": "Response mentions rebase or merge ordering, or sequencing sessions",
+          "type": "llm_judge",
+          "criteria": "The response mentions either rebasing/merging in a specific order, or sequencing one session after the other, as a way to manage the conflict"
+        }
+      ]
+    }
+  ]
+}

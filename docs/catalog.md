@@ -1,191 +1,149 @@
 # Forge Catalog
 
-Complete guide to all skills and actions in the forge shared skills repository.
+Complete guide to all skills in the forge shared skills repository.
 
 ## Consuming Projects
 
 | Project | Repository | Skills Used |
 |---------|------------|-------------|
-| Ising | [`codervisor/ising`](https://github.com/codervisor/ising) | `codervisor-forge` |
-| Cueless | [`codervisor/cueless`](https://github.com/codervisor/cueless) | `codervisor-forge` |
-| Synodic | [`codervisor/synodic`](https://github.com/codervisor/synodic) | `codervisor-forge` |
+| Ising | [`codervisor/ising`](https://github.com/codervisor/ising) | `rust-node-bootstrap`, `rust-npm-publish`, `rust-node-ci` |
+| Cueless | [`codervisor/cueless`](https://github.com/codervisor/cueless) | `rust-node-bootstrap`, `rust-npm-publish`, `rust-node-ci` |
+| Synodic | [`codervisor/synodic`](https://github.com/codervisor/synodic) | `rust-node-bootstrap`, `rust-npm-publish`, `rust-node-ci` |
 
 ## Skills
 
-Skills are agent-teachable knowledge bundles. Install them into your project
-so AI agents can use them during development.
+Skills are agent-teachable knowledge bundles. Install only what's relevant — each skill is independent.
 
-### codervisor-forge
+---
 
-**Complete toolkit: bootstrap, CI/CD, npm publishing, and versioning for Rust+Node.js hybrid projects.**
+### git-commit
+
+**Conventional commits, atomic staging, and hook failure recovery.**
+
+| Attribute | Value |
+|-----------|-------|
+| Audience | Any project using git |
+| Directory | [`skills/git-commit/`](../skills/git-commit/) |
+
+**Use when:** Staging and committing changes, writing commit messages, deciding what to group in a single commit, handling pre-commit hook failures, or choosing between amend and new commit.
+
+**Covers:** Conventional commits format, atomic commit rule, staging checklist (no secrets/debug code), pre-commit hook failure recovery, amend vs new commit decision.
+
+---
+
+### rust-node-bootstrap
+
+**Scaffold a new Rust+Node.js hybrid project from zero.**
+
+| Attribute | Value |
+|-----------|-------|
+| Audience | Rust+Node.js hybrid projects |
+| Directory | [`skills/rust-node-bootstrap/`](../skills/rust-node-bootstrap/) |
+
+**Use when:** Starting a new Rust+Node.js project, adding missing infrastructure to an existing repo.
+
+**Covers:** Project structure, file generation order, gather project info, post-bootstrap verification checklist.
+
+**Includes:**
+- References: `project-structure.md`, `checklist.md`
+- Templates: `templates/bootstrap/` — root configs (`package.json`, `Cargo.toml`, `pnpm-workspace.yaml`, `turbo.json`, `publish.config.ts`)
+
+---
+
+### rust-npm-publish
+
+**Publish Rust binaries to npm using the `optionalDependencies` platform package pattern.**
+
+| Attribute | Value |
+|-----------|-------|
+| Audience | Rust+Node.js hybrid projects |
+| Directory | [`skills/rust-npm-publish/`](../skills/rust-npm-publish/) |
+
+**Use when:** Publishing Rust binaries to npm, setting up platform packages, managing version sync across pnpm + Cargo workspaces, debugging publish pipeline failures.
+
+**Covers:** Platform package architecture (main + per-OS packages), `bin.js` wrapper, `publish.config.ts`, full publish pipeline (11 steps), version sync, `workspace:*` protocol, dev versioning.
+
+**Includes:**
+- References: `publish-pipeline.md`, `platform-matrix.md`, `version-strategy.md`, `workspace-protocol.md`, `troubleshooting.md`
+- Templates: `templates/scripts/` (11 publish pipeline scripts), `templates/wrapper/` (`bin.js` + package.json), `templates/types.ts`
+- Examples: real `publish.config.ts` from consuming projects
+
+---
+
+### rust-node-ci
+
+**GitHub Actions CI/CD for Rust+Node.js hybrid repos.**
+
+| Attribute | Value |
+|-----------|-------|
+| Audience | Rust+Node.js hybrid projects |
+| Directory | [`skills/rust-node-ci/`](../skills/rust-node-ci/) |
+
+**Use when:** Setting up or fixing GitHub Actions workflows, adding composite actions, working with the cross-platform build matrix, debugging CI failures.
+
+**Covers:** `ci.yml` + `publish.yml` structure, installable composite actions, publish workflow matrix, artifact flow, caching strategy, dev versioning in CI.
+
+**Installable composite actions** (copy to `.github/actions/<name>/`):
+
+| Action | Purpose |
+|--------|---------|
+| `setup-workspace` | Checkout + pnpm + Node.js + cache + install |
+| `rust-cross-build` | Build Rust binaries for a target platform |
+| `compute-version` | Compute dev/release version + npm tag |
+| `wait-npm-propagation` | Poll npm until platform packages are visible |
+
+**Includes:**
+- References: `troubleshooting.md` (CI/CD issues)
+- Templates: `templates/` (`ci.yml`, `publish.yml`, `copilot-setup-steps.yml`), `templates/actions/` (4 composite actions)
+
+---
+
+### parallel-worktrees
+
+**Run multiple AI coding agent sessions in parallel using git worktrees, with GitHub PR integration.**
 
 | Attribute | Value |
 |-----------|-------|
 | Status | Complete |
-| Audience | Rust+Node.js hybrid projects |
-| Requirements | None |
-| Directory | [`skills/codervisor-forge/`](../skills/codervisor-forge/) |
+| Audience | Any project using git + GitHub |
+| Requirements | `git`, `gh` CLI |
+| Directory | [`skills/parallel-worktrees/`](../skills/parallel-worktrees/) |
 
-**Use when:** Starting a new Rust+Node.js project, setting up CI/CD, publishing
-Rust binaries to npm, managing monorepo versions, or debugging pipeline failures.
+**Use when:** Running multiple AI agents simultaneously on different features or bugs,
+setting up isolated agent workspaces in the same repo, pushing parallel branches to
+GitHub and opening/updating PRs, coordinating between concurrent sessions, or cleaning
+up after merging.
 
-**Covers four domains:**
-- **Bootstrap** — Scaffold a new project with all infrastructure
-- **CI/CD** — GitHub Actions workflows for build, test, cross-compilation
-- **Publishing** — Distribute Rust binaries via npm platform packages
-- **Versioning** — Coordinated versions across Node.js and Rust packages
+**Covers:**
+- Worktree creation, layout convention, and the one-agent-one-worktree-one-branch rule
+- Full lifecycle: create → brief agent → work → push → PR → sync → merge → clean up
+- Branch naming conventions for agent-owned branches
+- Common pitfalls and fixes (detached HEAD, index locks, stale entries)
+- GitHub PR management via `gh` CLI (draft PRs, linking related PRs, merge strategies)
+- Agent coordination patterns (dependency ordering, handoffs, avoiding file conflicts)
 
-**Includes:**
-- SKILL.md — Decision tree, all four domains, platform matrix, troubleshooting
-- 7 reference docs — project structure, checklist, platform matrix, publish pipeline, version strategy, workspace protocol, troubleshooting
-- Templates — Root configs, workflow YAMLs, action READMEs, publish scripts, CLI wrapper
-- 2 examples — Real publish.config.ts from clawden and lean-spec projects
+**References:**
 
-> **Note:** The `leanspec-sdd` skill has moved to [`codervisor/lean-spec`](https://github.com/codervisor/lean-spec).
-
----
-
-## Actions
-
-Reusable GitHub Actions composite actions. Reference directly in workflows:
-
-```yaml
-- uses: codervisor/forge/actions/<name>@v1
-```
-
-### setup-workspace
-
-**Checkout + pnpm + Node.js + cache + install.**
-
-```yaml
-- uses: codervisor/forge/actions/setup-workspace@v1
-  with:
-    node-version: '22'        # default: '22'
-    install-args: '--frozen-lockfile'  # default
-```
-
-| Input | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `node-version` | No | `22` | Node.js version |
-| `pnpm-version` | No | (from packageManager) | pnpm version |
-| `install-args` | No | `--frozen-lockfile` | Extra pnpm install args |
+| File | Purpose |
+|------|---------|
+| `references/worktree-lifecycle.md` | Full command reference, flags, edge cases |
+| `references/github-pr-sync.md` | PR creation, updates, linking, merge strategies |
+| `references/agent-coordination.md` | Coordination patterns for parallel sessions |
 
 ---
-
-### compute-version
-
-**Compute effective version and npm tag for dev or production releases.**
-
-```yaml
-- uses: codervisor/forge/actions/compute-version@v1
-  id: version
-  with:
-    base-version: '0.2.15'
-    is-release: 'false'
-# Outputs: version, npm-tag, is-dev
-```
-
-| Input | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `base-version` | Yes | — | Base version from package.json |
-| `is-release` | No | `false` | Production release flag |
-| `run-id` | No | `${{ github.run_id }}` | Run ID for dev suffix |
-
-| Output | Description |
-|--------|-------------|
-| `version` | Computed version (e.g., `0.2.16-dev.12345`) |
-| `npm-tag` | npm dist-tag (`latest` or `dev`) |
-| `is-dev` | Whether this is a dev build |
-
----
-
-### rust-cross-build
-
-**Build Rust packages for a specific target platform and upload artifacts.**
-
-```yaml
-- uses: codervisor/forge/actions/rust-cross-build@v1
-  with:
-    target: aarch64-apple-darwin
-    packages: my-cli
-    platform: darwin-arm64
-```
-
-| Input | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `target` | Yes | — | Rust target triple |
-| `packages` | Yes | — | Space-separated Cargo package names |
-| `platform` | Yes | — | Platform key for artifact naming |
-| `profile` | No | `release` | Cargo build profile |
-| `artifact-prefix` | No | `binary` | Artifact name prefix |
-| `rust-cache` | No | `true` | Enable Rust build caching |
-
----
-
-### wait-npm-propagation
-
-**Poll npm registry until packages are visible at a given version.**
-
-```yaml
-- uses: codervisor/forge/actions/wait-npm-propagation@v1
-  with:
-    packages: '["@scope/cli-darwin-arm64", "@scope/cli-linux-x64"]'
-    version: '0.2.16'
-```
-
-| Input | Required | Default | Description |
-|-------|----------|---------|-------------|
-| `packages` | Yes | — | JSON array of package names |
-| `version` | Yes | — | Version to wait for |
-| `max-retries` | No | `20` | Maximum retry attempts |
-| `initial-delay` | No | `5` | Initial delay (seconds) |
-| `max-delay` | No | `30` | Maximum delay (seconds) |
-
----
-
-## Composition Patterns
-
-Skills and actions can be used independently or together:
-
-### Independent Use
-
-- Use `setup-workspace` action alone for any Node.js project
-- Use `codervisor-forge` skill for any Rust+Node.js hybrid project
-- Use `leanspec-sdd` skill (from [`codervisor/lean-spec`](https://github.com/codervisor/lean-spec)) for any project with specs
-
-### Paired Use
-
-- `codervisor-forge` skill + all actions → Complete CI/CD pipeline
-- `codervisor-forge` + `leanspec-sdd` → Full development lifecycle
-
-### Full Stack
-
-Use `codervisor-forge` skill + all four actions for a complete Rust+Node.js hybrid CI/CD setup.
-The `publish.config.ts` pattern ties the skill and actions together — a single config file
-drives both agent knowledge and CI/CD behavior.
 
 ## Installation
 
-### Skills
-
 ```bash
-# Via LeanSpec CLI
-lean-spec skill install codervisor/forge --skill <name>
+# Install a specific skill
+npx skills add codervisor/forge@<skill-name> -g -y
 
-# Via combo-skills
-npx combo-skills install codervisor/forge/skills/<name>
-
-# Manual copy
-cp -r skills/<name> .github/skills/
+# Manual: copy skill directory
+cp -r skills/<skill-name> .github/skills/
 
 # Git submodule (pinned version)
 git submodule add https://github.com/codervisor/forge.git .forge
 ```
 
-### Actions
-
-Reference directly in workflows — no installation needed:
-
-```yaml
-- uses: codervisor/forge/actions/<name>@v1
-```
+After installing, copy any templates you need from `skills/<skill-name>/templates/` into your project.
+Composite actions go into `.github/actions/<name>/`, workflows into `.github/workflows/`.

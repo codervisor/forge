@@ -1,0 +1,31 @@
+{
+  "expectations": [
+    {
+      "text": "(e2-file-isolation) Response recommends assigning routes.ts to only one session or otherwise isolating who owns it — the response advises that only one agent session should modify routes.ts, or that the sessions touching it should be sequenced rather than run in parallel",
+      "passed": true,
+      "evidence": "Option 1 is explicitly titled 'Assign routes.ts to One Session Only (Preferred)' and includes the principle quote: 'only one session touches the shared file. Other sessions import from it but don't modify it. Or: sequence the sessions that touch the shared file.' The response also provides a concrete re-briefing example instructing the non-owning session to 'Do NOT modify routes.ts.'"
+    },
+    {
+      "text": "(e2-concrete-options) Response gives at least one concrete, actionable option — the response provides at least one specific action the user can take (e.g., reassign routes.ts to one session, stop one session and sequence it, or extract routes.ts changes into a shared branch)",
+      "passed": true,
+      "evidence": "The response provides three concrete options with step-by-step instructions. Option 1 includes a sample re-briefing prompt with explicit file exclusion. Options 2 and 3 include exact bash commands (git fetch origin, git rebase origin/main, git rebase --continue, git push --force-with-lease) and numbered workflow steps."
+    },
+    {
+      "text": "(e2-rebase-or-sequence) Response mentions rebase or merge ordering, or sequencing sessions — the response mentions either rebasing/merging in a specific order, or sequencing one session after the other",
+      "passed": true,
+      "evidence": "Option 2 is titled 'Sequence the Sessions That Touch routes.ts' and explicitly shows 'Session A runs fully, merges first / Session B starts (or finishes) only after Session A merges'. Option 3 is titled 'Rebase Gate Before Merging' and includes 'git rebase origin/main' commands. The summary table also explicitly mentions 'merge one first, then rebase and proceed'."
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "timing": {
+    "total_tokens": 16295,
+    "duration_ms": 48877,
+    "total_duration_seconds": 48.9
+  },
+  "eval_feedback": "The response is thorough and well-structured. It directly addresses all three assertions with clear, actionable guidance. The skill's cardinal principle is quoted verbatim and then expanded into three tiered options covering different stages of work (before agents go deep, sessions mostly done but sequential, sessions mostly done and truly parallel). The rebase and sequencing concepts are covered with concrete bash commands and workflow steps. The summary table at the end makes the decision logic easy to follow."
+}

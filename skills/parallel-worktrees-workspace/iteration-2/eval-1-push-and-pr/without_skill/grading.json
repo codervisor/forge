@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "(e1-rebase-first) Response recommends rebasing on origin/main BEFORE pushing",
+      "passed": false,
+      "evidence": "The response goes directly from committing (Step 2) to pushing (Step 3) with no mention of fetching or rebasing on origin/main. There is no `git fetch origin`, `git rebase origin/main`, or equivalent step anywhere in the response."
+    },
+    {
+      "text": "(e1-force-with-lease) Response mentions `--force-with-lease` for pushing after a rebase",
+      "passed": false,
+      "evidence": "The literal text '--force-with-lease' does not appear anywhere in the response. The only push commands shown are `git push -u origin feat/payments` and `git push`, with no mention of force-with-lease."
+    },
+    {
+      "text": "(e1-cleanup-sequence) Response includes post-merge cleanup: worktree remove + branch delete + prune",
+      "passed": false,
+      "evidence": "The cleanup section (line 68-74) includes `git worktree remove <path-to-worktree>` and `git branch -d feat/payments`, but omits `git worktree prune`. All three steps (worktree remove, branch delete, AND prune) are required for this assertion to pass."
+    },
+    {
+      "text": "(e1-conventional-title) Response uses conventional commits format for the PR title (type(scope): subject)",
+      "passed": true,
+      "evidence": "The response demonstrates conventional commits format in two places: the commit message example `\"feat(payments): your commit message\"` (line 22) and the PR title example `\"feat(payments): <short description>\"` (line 44), both following the type(scope): subject pattern."
+    }
+  ],
+  "summary": {
+    "passed": 1,
+    "failed": 3,
+    "total": 4,
+    "pass_rate": 0.25
+  },
+  "timing": {
+    "executor_duration_seconds": 27.2
+  },
+  "eval_feedback": {
+    "suggestions": [
+      "Add a 'sync with main' step before pushing: run `git fetch origin` followed by `git rebase origin/main` (or `git merge origin/main`) to ensure the branch is up to date before opening a PR.",
+      "After recommending a rebase, note that if the branch was already pushed, a `git push --force-with-lease` is needed to update the remote — explaining why --force-with-lease is safer than --force.",
+      "Complete the post-merge cleanup sequence by adding `git worktree prune` after `git worktree remove` and `git branch -d` to remove stale worktree tracking references."
+    ],
+    "overall": "The response covers the basic push-and-PR workflow and correctly uses conventional commits format for example titles. However, it misses three important best practices for worktree-based development: syncing with the upstream main branch before pushing (rebase-first), safe force-pushing after a rebase (--force-with-lease), and the complete post-merge cleanup sequence (missing git worktree prune). These gaps could lead to messy PR diffs, diverged history, or stale worktree entries in the repository."
+  }
+}

@@ -2,19 +2,22 @@
 
 ## Project: forge
 
-Shared agent skills and reusable GitHub Actions for Codervisor projects (Ising, Cueless, Synodic, and others).
+Shared agent skills for Codervisor projects (Ising, Cueless, Synodic, and others).
 
 ## Structure
 
 - `skills/` — Agent skills (SKILL.md + references + templates), shared across projects
-- `actions/` — Reusable GitHub Actions composite actions
 - `docs/` — Authoring guides, catalog, and versioning docs
 
 ## Skills
 
 | Skill | Description | Consuming Projects |
 |-------|-------------|-------------------|
-| `codervisor-forge` | Bootstrap, CI/CD, npm publishing, and versioning for Rust+Node.js hybrid projects | Ising, Cueless, Synodic |
+| `git-commit` | Conventional commits, atomic staging, hook failure recovery | Any |
+| `rust-node-bootstrap` | Scaffold a new Rust+Node.js hybrid project | Ising, Cueless, Synodic |
+| `rust-npm-publish` | Publish Rust binaries to npm via the optionalDependencies platform package pattern | Ising, Cueless, Synodic |
+| `rust-node-ci` | GitHub Actions CI/CD workflows and installable composite actions | Ising, Cueless, Synodic |
+| `parallel-worktrees` | Parallel AI agent sessions in git worktrees with GitHub PR sync | Any |
 
 ## Consuming Projects
 
@@ -26,6 +29,8 @@ This repo serves as the central skills repository for all Codervisor projects:
 
 Skills are installed into consuming projects via `npx skills add codervisor/forge@<skill-name> -g -y` or by copying the skill directory.
 
+Templates (workflows, composite actions, scripts) inside each skill are installed locally into the consuming project — they are not referenced from this repo at runtime.
+
 ## Rules
 
 - Each skill is self-contained in its directory with SKILL.md as entry point
@@ -33,6 +38,5 @@ Skills are installed into consuming projects via `npx skills add codervisor/forg
 - Skills are documentation-first — they teach agents, not replace tools
 - Keep SKILL.md under 3000 tokens; use references for details
 - Templates provide config-driven starting points, not copy-paste code
-- Actions follow GitHub Actions composite action conventions
 - Skills should be project-agnostic where possible — use config-driven templates so consuming projects can adapt them
 - When adding a new skill, update `docs/catalog.md` and this file

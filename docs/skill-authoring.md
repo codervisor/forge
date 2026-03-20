@@ -138,7 +138,7 @@ They are *not* copy-paste code — they demonstrate patterns and mark customizat
 1. **Config-driven**: Templates read from a project config file (e.g., `publish.config.ts`)
 2. **Comment markers**: Use comments to mark customization points: `# CUSTOMIZE: ...`
 3. **Minimal dependencies**: Templates should work with standard tools
-4. **No duplication**: Reference existing files (e.g., actions/) rather than copying them
+4. **No duplication**: Share common patterns via references rather than copying them
 
 ### Customization Markers
 
