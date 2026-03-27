@@ -1,0 +1,62 @@
+name: Rust Cross Build
+description: Build a Rust binary for a specific target triple and upload it as a CI artifact.
+
+inputs:
+  target:
+    description: Rust target triple (e.g. x86_64-apple-darwin)
+    required: true
+  packages:
+    description: Cargo package name to build (e.g. ising-cli)
+    required: true
+  platform:
+    description: Platform identifier used for the artifact name (e.g. darwin-x64)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Install Rust toolchain
+      uses: dtolnay/rust-toolchain@stable
+      with:
+        targets: ${{ inputs.target }}
+
+    - name: Cache Rust build
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+          target
+        key: ${{ runner.os }}-cargo-${{ inputs.target }}-${{ hashFiles('**/Cargo.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-cargo-${{ inputs.target }}-
+
+    - name: Build binary
+      shell: bash
+      run: cargo build --release --target ${{ inputs.target }} --package ${{ inputs.packages }}
+
+    - name: Stage binary (Unix)
+      if: ${{ !startsWith(inputs.target, 'x86_64-pc-windows') }}
+      shell: bash
+      run: |
+        mkdir -p _binary_staging
+        # Find the binary produced by the package (first non-.d file under release/)
+        BINARY=$(find target/${{ inputs.target }}/release -maxdepth 1 -type f -not -name '*.d' -not -name '*.rlib' | head -1)
+        cp "$BINARY" _binary_staging/
+        echo "Staged: $BINARY"
+
+    - name: Stage binary (Windows)
+      if: ${{ startsWith(inputs.target, 'x86_64-pc-windows') }}
+      shell: bash
+      run: |
+        mkdir -p _binary_staging
+        BINARY=$(find target/${{ inputs.target }}/release -maxdepth 1 -type f -name '*.exe' | head -1)
+        cp "$BINARY" _binary_staging/
+        echo "Staged: $BINARY"
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: binary-${{ inputs.platform }}
+        path: _binary_staging/
+        if-no-files-found: error
