@@ -1,0 +1,41 @@
+name: Wait for npm Propagation
+description: Poll the npm registry until all specified packages are available at the target version.
+
+inputs:
+  packages:
+    description: JSON array of npm package names to wait for (e.g. '["@scope/pkg-a","@scope/pkg-b"]')
+    required: true
+  version:
+    description: Version string to wait for (e.g. 0.1.0)
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Wait for packages to propagate
+      shell: bash
+      run: |
+        PACKAGES='${{ inputs.packages }}'
+        VERSION='${{ inputs.version }}'
+        MAX_ATTEMPTS=30
+        SLEEP_SECONDS=30
+
+        for pkg in $(echo "$PACKAGES" | jq -r '.[]'); do
+          echo "Waiting for $pkg@$VERSION..."
+          attempt=1
+          while true; do
+            if npm view "$pkg@$VERSION" version 2>/dev/null | grep -qF "$VERSION"; then
+              echo "  ✅ $pkg@$VERSION is available"
+              break
+            fi
+            if [ "$attempt" -ge "$MAX_ATTEMPTS" ]; then
+              echo "  ❌ Timed out waiting for $pkg@$VERSION after $((MAX_ATTEMPTS * SLEEP_SECONDS))s"
+              exit 1
+            fi
+            echo "  Attempt $attempt/$MAX_ATTEMPTS: not yet available, retrying in ${SLEEP_SECONDS}s..."
+            sleep "$SLEEP_SECONDS"
+            attempt=$((attempt + 1))
+          done
+        done
+
+        echo "✅ All packages propagated"
