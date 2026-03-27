@@ -11,6 +11,10 @@ inputs:
   platform:
     description: Platform identifier used for the artifact name (e.g. darwin-x64)
     required: true
+  binary-name:
+    description: Name of the produced binary (e.g. ising). Defaults to the package name.
+    required: false
+    default: ''
 
 runs:
   using: composite
@@ -35,24 +39,36 @@ runs:
       shell: bash
       run: cargo build --release --target ${{ inputs.target }} --package ${{ inputs.packages }}
 
-    - name: Stage binary (Unix)
-      if: ${{ !startsWith(inputs.target, 'x86_64-pc-windows') }}
+    - name: Stage binary
       shell: bash
       run: |
-        mkdir -p _binary_staging
-        # Find the binary produced by the package (first non-.d file under release/)
-        BINARY=$(find target/${{ inputs.target }}/release -maxdepth 1 -type f -not -name '*.d' -not -name '*.rlib' | head -1)
-        cp "$BINARY" _binary_staging/
-        echo "Staged: $BINARY"
+        BINARY_NAME="${{ inputs.binary-name }}"
+        if [ -z "$BINARY_NAME" ]; then
+          BINARY_NAME="${{ inputs.packages }}"
+        fi
 
-    - name: Stage binary (Windows)
-      if: ${{ startsWith(inputs.target, 'x86_64-pc-windows') }}
-      shell: bash
-      run: |
+        IS_WINDOWS=false
+        if [[ "${{ inputs.target }}" == *-windows-* ]]; then
+          IS_WINDOWS=true
+        fi
+
+        EXT=""
+        if [ "$IS_WINDOWS" = "true" ]; then
+          EXT=".exe"
+        fi
+
+        SRC="target/${{ inputs.target }}/release/${BINARY_NAME}${EXT}"
+
+        if [ ! -f "$SRC" ]; then
+          echo "❌ Binary not found: $SRC"
+          echo "Contents of target/${{ inputs.target }}/release/:"
+          ls -la "target/${{ inputs.target }}/release/" 2>/dev/null || echo "(directory not found)"
+          exit 1
+        fi
+
         mkdir -p _binary_staging
-        BINARY=$(find target/${{ inputs.target }}/release -maxdepth 1 -type f -name '*.exe' | head -1)
-        cp "$BINARY" _binary_staging/
-        echo "Staged: $BINARY"
+        cp "$SRC" _binary_staging/
+        echo "✅ Staged: $SRC → _binary_staging/${BINARY_NAME}${EXT}"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
