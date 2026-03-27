@@ -1,0 +1,48 @@
+name: Compute Version
+description: Compute a versioned build number, adding a dev suffix for non-release builds.
+
+inputs:
+  base-version:
+    description: Base semantic version from package.json
+    required: true
+  is-release:
+    description: Whether this is a release build
+    required: false
+    default: 'false'
+
+outputs:
+  version:
+    description: Full version string (e.g. 0.1.0 or 0.1.0-dev.20260327.abc12345)
+    value: ${{ steps.compute.outputs.version }}
+  npm-tag:
+    description: npm dist-tag to publish under (latest or dev)
+    value: ${{ steps.compute.outputs.npm-tag }}
+  is-dev:
+    description: Whether this is a dev build
+    value: ${{ steps.compute.outputs.is-dev }}
+
+runs:
+  using: composite
+  steps:
+    - id: compute
+      shell: bash
+      run: |
+        BASE_VERSION="${{ inputs.base-version }}"
+        IS_RELEASE="${{ inputs.is-release }}"
+
+        if [ "$IS_RELEASE" = "true" ]; then
+          VERSION="$BASE_VERSION"
+          NPM_TAG="latest"
+          IS_DEV="false"
+        else
+          SHORT_SHA=$(echo "$GITHUB_SHA" | cut -c1-8)
+          DATE=$(date -u +%Y%m%d)
+          VERSION="${BASE_VERSION}-dev.${DATE}.${SHORT_SHA}"
+          NPM_TAG="dev"
+          IS_DEV="true"
+        fi
+
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        echo "npm-tag=$NPM_TAG" >> "$GITHUB_OUTPUT"
+        echo "is-dev=$IS_DEV" >> "$GITHUB_OUTPUT"
+        echo "Computed version: $VERSION (tag: $NPM_TAG)"
